@@ -6,7 +6,7 @@ var app = angular.module('myApp', [
 app.config(function($routeProvider) {
   $routeProvider
     .when("/menu", {
-      templateUrl: "menu.php"	  
+      templateUrl: "menu.html"	  
     });
 });
 
