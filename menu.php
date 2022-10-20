@@ -1,0 +1,676 @@
+<style>
+  .section {
+  padding-right: 0;
+  }
+  .nav-tabs {
+  width:auto;
+  }
+  .nav-tabs > li > a {
+  border: 1px dotted orange !important;
+  border-radius: 0.3rem !important;
+  width: auto !important;
+  padding: 0.3rem;
+  }
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
+  background-color: orange !important;
+  color: white !important;
+  width: auto !important;
+  }
+  .list-group-item {min-height:2rem; cursor: pointer;background-color:inherit;
+  font-size: 1rem;
+  line-height: 2rem;
+  }
+  body {
+  font-size: 0.8rem;
+  }
+  .btn-xs {
+  font-size: 0.6rem !important;
+  padding: 0.05rem 0.1rem 0.05rem 0.1rem !important;
+  line-height: 0.8rem !important;
+  }
+  .btn-sm {font-size: 0.7rem !important;
+  padding: 0.1rem 0.2rem 0.1rem 0.2rem !important;
+  line-height: 1.1rem !important;
+  }
+  .btn-md {font-size: 0.8rem !important;
+  padding: 0.15rem 0.25rem 0.15rem 0.25rem !important;
+  line-height: 1.2rem !important;
+  }
+  .btn-lg, .modal-title {font-size: 1rem !important;
+  padding: 0.2rem 0.3rem 0.2rem 0.3rem !important;
+  line-height: 1.6rem !important;
+  }
+  .badge {
+  position:relative;
+  }
+  .badge[data-badge]:after {
+  content:attr(data-badge);
+  position:absolute;
+  top:-0.5rem;
+  right:-0.5rem;
+  font-size:0.6rem; 
+  background:red;
+  color:white;
+  width:0.8rem;height:0.8rem;
+  text-align:center;
+  line-height:1rem;
+  border-radius:50%;
+  box-shadow:0 0 1px #333;
+  }
+  table, td, th {
+  font-size:0.8rem;
+  padding: 0.2rem 0.2rem;
+  }
+  th {
+  text-align: center !important;
+  }
+  .modal {
+  max-width: 18rem !important;
+  margin: auto !important;
+  }
+  .modal-dialog {
+  max-height:97vh !important;
+  }
+  .modal-content {
+  max-height:95vh !important;
+  }
+  .modal-header {
+  max-height:2.5rem !important; 
+  line-height: 2.5rem !important;
+  padding: 0 0.5rem 0 0.5rem;
+  /*background-color: #d9edf7 !important; bg-info*/
+  background-color: #dff0d8 !important; /*bg-success*/
+  }
+  .modal-footer {
+  max-height: 2.5rem !important;
+  line-height: 2.5rem !important;
+  padding: 0 0.5rem 0 0.5rem;
+  background-color: #dff0d8 !important; /*bg-success*/
+  }
+  .modal-body {
+  padding:0.6rem !important;
+  max-height:70vh !important;
+  min-height:4rem !important;
+  overflow: scroll !important;
+  background-color: #fcf8e3 !important; /*bg-warning*/
+  }
+  .text-center {
+  text-align: center !important;
+  }
+  .btn-warning {
+  background-color: gray !important;
+  }
+  .btn-success {
+    background-color: darkgreen !important;
+  }
+  
+  .btn-underline {
+  	  border-bottom: 0.1rem solid #808080;
+  }
+  
+  .modal-header>.pull-right {
+  margin-top: 0.5rem;
+  }
+  input[type=text],input[type=tel],input[type=password],input[type=number] {
+  padding: 0.2rem;
+  border: none;
+  border-bottom: 0.1rem solid #808080;
+  width: 10rem;
+  }
+  input[type=radio],input[type=checkbox] {
+  padding: 0.2rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  }
+  h4 {  font-size: 1rem;display:inline;}
+  input { font-size: 0.8rem;  }
+  input[type=date],input[type=month] {
+  width:7.5rem;
+  font-size: 0.8rem;
+  height:1.2rem;
+  line-height:1.2rem;
+  }
+</style>
+<div class="container">
+  <ui-shared-state id="activeTab" default="1"></ui-shared-state>
+  <!-- 列出所有menu -->
+  <div class="scrollable scrollable-content bg-warning">
+    <div style="padding: 0.8rem 0.8rem; display: inline-block;width:100%">
+      <span ng-show="staff" class="btn btn-md btn-default" ng-click="showHistoryItems(true,0,'',pickedDate)"><i class="fa fa-list"></i></span>
+      <span ng-click="logout()" class="btn btn-md btn-default">{{realName}}</span>
+      <div class="pull-right" style="margin-top:0.3rem">
+        <span ng-click="showItemList()" class="badge" data-badge="{{oItems.length}}">
+        <i style="font-size:0.8rem" class="fa fa-shopping-cart"></i></span>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <ul class="nav nav-tabs">
+        <li ng-repeat="c in $parent.cats" ui-class="{'active': activeTab == {{c.id}}}">
+          <a ui-set="{'activeTab': c.id}">{{c.name}}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-xs-12">
+      <div ng-repeat="c in cats" ui-if="activeTab == {{c.id}}">
+        <!--h3 class="page-header">{{c.name}}</h3-->
+        <div class="list-group" style="font-size:0.8rem;margin-left:0.5rem;"	>
+          <div class="list-group-item" style="font-size:0.8rem" 
+            ng-repeat=" x in products | filter: {cat:c.id}"
+            ng-click="showItem(x);">
+            <div class="pull-left">{{x.name}}</div>
+            <div class="pull-right">{{x.price}}元</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modals and Overlays -->
+<div ui-content-for="modals">
+  <!-- modal_login -->
+  <div class="modal" ui-if="modal_login" ui-shared-state="modal_login" ng-init="setStaff(true)">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <center>
+            <h4 class="modal-title text-center">自食齊力POS系統</h4>
+          </center>
+        </div>
+        <div class="modal-body text-center">
+          <p>
+          <div ng-if="loginMessage.length>0" class="btn btn-sm btn-danger">{{loginMessage}}</div>
+          <div ng-show="staff"  style="margin-top:0.6rem;">
+            <p>
+            <div style="padding:0.1rem;">
+              <label class="btn btn-sm btn-default">帳號</label><input type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ng-model="myUID" placeholder="請輸入帳號" />
+            </div>
+            <div style="padding:0.1rem;">
+              <label class="btn btn-sm btn-default">密碼
+              </label><input type="password" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ng-model="myPASS" ng-keypress="($event.which === 13)?checkLogin(myUID,myPASS,store):0" placeholder="請輸入密碼" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-info" ng-show="staff">
+          <button ng-click="checkLogin(myUID,myPASS,store)" class="btn btn-success  btn-sm" >登入</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal_item_confirm 點某項後跳出確認畫面 -->
+  <div class="modal" ui-if="modal_item_confirm" ui-shared-state="modal_item_confirm">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"><span class="btn btn-md btn-default" ng-click="logout()" >{{realName}}</span>
+            &nbsp;選擇品項
+          </h4>
+          <button ui-turn-off="modal_item_confirm" class="btn btn-default pull-right btn-sm"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <p>品名: {{ oItem.name }} </p>
+          <p>價格: {{ oItem.price }} </p>
+          <p>
+          <div ng-repeat="y in oItem.options" ng-if="y.price>0">
+            <input type="checkbox" ng-model="y.checked"> {{y.name}}({{y.price}}元)
+          </div>
+          </p>
+          <p>
+          <div ng-repeat="y in oItem.options" ng-if="y.price==0">
+            <div ng-repeat="z in y.radios" style="display:inline;">
+              <label><input type="radio" name="{{y.name}}" ng-model="y.selected" value="{{z}}">{{z}}</label>
+            </div>
+          </div>
+          </p>
+          <p>其它需求: <input type="text" style="width:50%;" ng-model="oItem.memo"></p>
+          <div>小計: {{ calcItem(oItem) }}&nbsp;x&nbsp;{{oItem.quantity}}&nbsp;=&nbsp;{{calcItem(oItem)*oItem.quantity}}&nbsp;&nbsp;&nbsp;
+		  <span ng-click="setItemQty(oItem,1,discType,discRate)" class="btn btn-sm btn-primary" style="border-radius: 0px;margin:0px 0px"><i class="fa fa-plus"></i></span><input style="width:2rem;height:1.5rem;line-height:1.5rem;padding: 0;border:none;text-align:center" ng-change="setItemQty(oItem,0,discType,discRate)" type="number" ng-model="oItem.quantity"/><span ng-click="setItemQty(oItem,-1,discType,discRate)" class="btn btn-sm btn-primary" style="border-radius: 0px;margin:0px 0px"><i class="fa fa-minus"></i></span>
+		  </div>
+          <p> - <span class="btn btn-xs btn-danger" ng-click="setDiscOption()">折扣: {{oItem.discount}}</span></p>
+          <p ng-show="staff && showDiscOption">
+            <label><input type="radio" ng-model="discType" value="0" ng-change="setItemQty(oItem,0,0,0)">不折扣</label>
+            <!--label><input type="radio" ng-model="discType" value="1" ng-change="setItemQty(oItem,0,1,0)">促銷(二杯9折)</label-->
+            <label><input type="radio" ng-model="discType" value="2" ng-change="setItemQty(oItem,0,2,0)">折扣</span>
+            <span ng-show="discType==2"><input type="number" min="0" max="100" step="5" ng-model="discRate" ng-change="setItemQty(oItem,0,2,discRate)" style="width:3rem">%</span>
+            </span>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <div class="pull-left">合計: {{ calcItem(oItem)*oItem.quantity-oItem.discount |number }}&nbsp;&nbsp;&nbsp;&nbsp; 
+          </div>
+          <button class="btn btn-primary  btn-md" ng-click="pushItem(oItem,false)">加入&續點</button>
+		  <button class="btn btn-danger  btn-md" ng-click="pushItem(oItem,true)">加入&結帳</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal_item_list(一張訂單內有許多項目) -->
+  <div class="modal" ui-if="modal_item_list" ui-shared-state="modal_item_list">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">
+            <span class="btn btn-sm btn-default" ng-click="logout()" >{{realName}}</span>&nbsp;點單
+          </h4>
+          <button ui-turn-off="modal_item_list" class="btn btn-default pull-right btn-sm" style="margin-right:0.3rem;"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="list-group">
+            <div class="list-group-item" ng-repeat=" oi in oItems track by $index">
+              <div class="pull-left">{{oi.name}}</div>
+              <div class="pull-right">
+                <span ng-show="oi.discount>0">{{oi.price+oi.addup}}x{{oi.quantity}}-{{oi.discount}}={{(oi.price+oi.addup)*oi.quantity-oi.discount}} 元</span>
+                <span ng-show="oi.discount==0">{{oi.price+oi.addup}}x{{oi.quantity}}={{(oi.price+oi.addup)*oi.quantity}} 元</span>
+                <i class="fa fa-trash-o" style="margin-left:0.1rem;color:red" ng-click="showDialog('提醒','確認要刪除['+oi.name+']嗎?','oItems.splice('+$index+',1)')"></i>
+              </div>
+              <div ng-repeat="op in oi.options | filter:{checked:true}" class="btn btn-xs btn-success" style="margin-left:0.1rem">{{op.name}}</div>
+              <div ng-repeat="op in oi.options | filter:{price:0}" ng-if="op.selected != null" class="btn btn-xs btn-success" style="margin-left:0.1rem">{{op.selected}}</div>
+              <div ng-if="oi.memo.length>0" class="btn btn-xs btn-warning" style="margin-left:0.1rem">{{oi.memo}}</div>
+              <!--i class="fa fa-pencil" style="margin-left:0.1rem;color:red" ng-click="editItem($index)" ui-turn-on="modal_item_modify"></i-->
+            </div>
+            <div class="list-group-item text-center" ng-if="submitAck.length>0">{{submitAck}}</div>
+            <div class="list-group-item text-right">合計: {{ sumItems(oItems)|number }} </div>
+          </div>
+          <div class="btn-group" style="margin-right:1rem;" ng-show="readySubmit">
+            <div style="margin-top: 0.5rem;margin-bottom:0.5rem;">備註&nbsp;<input style="width:10rem;padding:0 0 0 0" type="text" ng-model="orderMemo" placeholder="可填姓名、單位或其它說明"></div>
+            <label><input type="radio" value="內用" ng-model="resrvType">內用</label>
+            <select ng-show="resrvType=='內用'" ng-model="resrvTable">
+              <option value="0" selected="selected">請選桌號</option>
+              <option value="1">第1桌</option>
+              <option value="2">第2桌</option>
+              <option value="3">第3桌</option>
+              <option value="4">第4桌</option>
+              <option value="5">第5桌</option>
+              <option value="6">第6桌</option>
+              <option value="7">第7桌</option>
+              <option value="8">第8桌</option>
+              <option value="9">第9桌</option>
+              <option value="10">第10桌</option>
+              <option value="11">第11桌</option>
+              <option value="12">第12桌</option>
+              <option value="13">第13桌</option>
+              <option value="14">第14桌</option>
+              <option value="15">第15桌</option>
+            </select>
+            <label><input type="radio" value="外帶" ng-model="resrvType" checked="checked">外帶</label>
+            <select ng-show="false" ng-model="resrvTime">
+              <option value="0" selected="selected">現場等</option>
+              <option value="10">10分鐘到</option>
+              <option value="20">20分鐘到</option>
+              <option value="30">30分鐘到</option>
+              <option value="40">40分鐘到</option>
+              <option value="50">50分鐘到</option>
+              <option value="60">60分鐘到</option>
+            </select>
+          </div>
+		</div>
+		<div class="proccessing" ng-show="loading">
+          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        </div>
+        <div class="modal-footer" ng-init="resrvType='外帶';resrvTime='0';resrvTable='0'">
+          <button ng-show="sumItems(oItems)>0 && !readySubmit" class="btn btn-danger btn-md" ng-click="setReadySubmit(true)">送出訂單</button>
+          <button ng-show="sumItems(oItems)>0 && !readySubmit" ui-turn-off="modal_item_list"  class="btn btn-primary  btn-md">繼續加點</button>
+		  <div class="btn-group">
+            <div class="btn btn-danger  btn-md" ng-show="readySubmit" ng-click="orderSubmit(resrvType,resrvTime,resrvTable,customerPhone,customerType,orderMemo)" style="margin-right:0.3rem;float:none">確認送出</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal_item_modify 修改購物清單中的某一項 -->
+  <div class="modal" ui-if="modal_item_modify" ui-shared-state="modal_item_modify">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">修改品項</h4>
+          <button ui-turn-off="modal_item_modify" class="btn btn-default pull-right btn-sm"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <p>品名: {{ oTemp.name }} </p>
+          <p>價格: {{ oTemp.price }} </p>
+          <p>
+          <div ng-repeat="y in oTemp.options" ng-if="y.price>0">
+            <input type="checkbox" ng-model="y.checked"> {{y.name}}({{y.price}}元)
+          </div>
+          </p>
+          <p>
+          <div ng-repeat="y in oTemp.options" ng-if="y.price==0">
+            <div ng-repeat="z in y.radios" style="display:inline;">
+              <label><input type="radio" name="{{y.name}}" ng-model="y.selected" value="{{z}}">{{z}}</label>
+            </div>
+          </div>
+          </p>
+          <p>小計: {{ calcItem(oTemp) }}&nbsp;&nbsp;&nbsp;其它需求: 
+            <input type="text" style="width:50%" ng-model="oTemp.memo">
+          </p>
+        </div>
+        <div class="modal-footer">
+          <div class="pull-left">合計: {{ calcItem(oTemp)*oTemp.quantity|number }}&nbsp;&nbsp;&nbsp;&nbsp; 
+            <span ng-click="setItemQty(oTemp,1)" class="btn btn-sm btn-primary" style="border-radius: 0px;margin:0px 0px"><i class="fa fa-plus"></i></span>
+            <span class="btn btn-sm btn-default" style="border-radius: 0px;margin:0px 0px">&nbsp;{{oTemp.quantity}}&nbsp;份</span>
+            <span ng-click="setItemQty(oTemp,-1)" class="btn btn-sm btn-primary" style="border-radius: 0px;margin:0px 0px"><i class="fa fa-minus"></i></span>
+          </div>
+          <button class="btn btn-danger  btn-md pull-right" ng-click="updateItem(oTemp);Ui.turnOff('modal_item_modify')">確認修改</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <!-- modal_day_sheet 秀出本日的日結報表 -->
+  <div class="modal" ui-if="modal_day_sheet" ui-shared-state="modal_day_sheet">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"><span class="btn btn-sm btn-default">日報</span>&nbsp;&nbsp;<input class="bg-info" type="date" ng-model="pickedDate" ng-change="showDaySheet(pickedDate)"></h4>
+          <button ui-turn-off="modal_day_sheet" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body" style="font-size:0.8rem">
+          <label><input type="radio" ng-model="classifyBy" value="Cashier">依人員</label>
+          &nbsp;&nbsp;
+          <label><input type="radio" ng-model="classifyBy" value="Product">依商品</label>
+          &nbsp;&nbsp;
+          <label><input type="radio" ng-model="classifyBy" value="Category">依類別</label>
+          <p>
+		  <div class="proccessing" ng-show="loading">
+          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+          </div>
+          <table ng-if="classifyBy=='Cashier'" width="100%" border="1" align="center">
+            <tr>
+              <th>結帳員</th>
+              <th>打單</th>
+              <th>收現</th>
+              <th>折價券</th>
+            </tr>
+            <tr ng-repeat="ds in oDaySheet" ng-class="{'bg-info':ds.uid=='total'}">
+              <td style="text-align:center"><span class="btn btn-sm">{{realNames[ds.uid]}}</span></td>
+              <td style="text-align:right"><span class="btn btn-sm">{{ds.ar|number}}</span></td>
+              <td style="text-align:right"><span class="btn btn-sm"  ng-class="{'btn-success':ds.uid=='total'}">{{ds.cash|number}}</span></td>
+              <td style="text-align:right"><span class="btn btn-sm">{{ds.coupon|number}}</span></td>
+            </tr>
+          </table>
+		  <div ng-if="classifyBy=='Cashier' && oDaySheet_Strike['total']['Cash']>0" class="bg-danger" style="width:100%;padding:0.3rem;margin-top:0.2rem;font-size:0.6rem">
+		    <div  ng-show="key!='total'" ng-repeat="(key,value) in oDaySheet_Strike" >
+		      <div style="display:flex">
+		        <div style="width:3rem;">{{key}}</div>
+		        <div style="flex-grow:3">
+		          <ul style="padding-left: 0;">
+		            <li class="btn-underline" style="width:100%;display: flex;justify-content: space-between;" ng-repeat="(k,v) in value">
+		      	    <span>{{k}}</span>
+		      	    <span style="margin-top:0.1rem">{{v}}</span>
+		      	  </li>
+		          </ul>
+		        </div>
+		      </div>
+		    </div>
+		  </div>
+          <table ng-if="classifyBy=='Product'" width="100%" border="1" align="center">
+            <tr>
+              <th>商品</th>
+              <th>數量</th>
+              <th>金額</th>
+            <tr ng-repeat="dsp in oDaySheet_P" ng-class="{'bg-info':dsp.product=='合　　計'}">
+              <td ng-style="dsp.product=='合　　計' &&{'text-align':'center'}"><span class="btn btn-sm">{{dsp.product}}</span></td>
+              <td style="text-align:right"><span class="btn btn-sm">{{dsp.qty|number}}</span></td>
+              <td style="text-align:right"><span class="btn btn-sm">{{dsp.ar|number}}</span></td>
+            </tr>
+          </table>
+		  <table ng-if="classifyBy=='Category'" width="100%" border="1" align="center">
+            <tr>
+              <th>類別</th>
+              <th>數量</th>
+              <th>金額</th>
+            <tr ng-repeat="dsp in oDaySheet_C" ng-class="{'bg-info':dsp.cat=='合　　計'}">
+              <td ng-style="dsp.cat=='合　　計' &&{'text-align':'center'}"><span class="btn btn-sm" ng-show="dsp.cat=='合　　計'">{{dsp.cat}}</span><span class="btn btn-sm" ng-repeat="cat in cats" ng-show="cat.id==dsp.cat">{{cat.name}}</span></td>
+              <td style="text-align:right"><span class="btn btn-sm">{{dsp.qty|number}}</span></td>
+              <td style="text-align:right"><span class="btn btn-sm">{{dsp.ar|number}}</span></td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <span class="btn btn-sm">收現</span><span class="btn btn-sm btn-success">{{$parent.oDaySheet["total"]["cash"]|number}}</span>
+	  <span class="btn btn-sm">元</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal_month_sheet 秀出本月的月報表 -->
+  <div class="modal" ui-if="modal_month_sheet" ui-shared-state="modal_month_sheet">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"><span class="btn btn-sm btn-default">月報</span>&nbsp;&nbsp;<input class="bg-info"  type="month" ng-model="pickedMonth" ng-change="showMonthSheet(pickedMonth)"></h4>
+          <button ui-turn-off="modal_month_sheet" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          <label><input type="radio" ng-model="classifyBy" value="Cashier">依人員</label>
+          &nbsp;
+          <label><input type="radio" ng-model="classifyBy" value="Product">依商品</label>
+          &nbsp;
+          <label><input type="radio" ng-model="classifyBy" value="Category">依類別</label>
+          &nbsp;
+          <label><input type="radio" ng-model="classifyBy" value="Date">依日期</label>
+          <p>
+		  <div class="proccessing" ng-show="loading">
+          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+          </div>
+          <table ng-if="classifyBy=='Cashier'" width="100%" border="1" align="center">
+            <tr>
+              <th>結帳員</th>
+              <th>打單</th>
+              <th>收現</th>
+              <th>折價券</th>
+            </tr>
+            <tr ng-repeat="ds in oMonthSheet" ng-class="{'bg-info':ds.uid=='total'}">
+              <td style="text-align:center">{{realNames[ds.uid]}}</td>
+              <td style="text-align:right">{{ds.ar|number}}</td>
+              <td style="text-align:right">{{ds.cash|number}}</td>
+              <td style="text-align:right">{{ds.coupon|number}}</td>
+            </tr>
+          </table>
+          <table ng-if="classifyBy=='Date'" width="100%" border="1" align="center">
+            <tr>
+              <th>日期</th>
+              <th>打單</th>
+              <th>收現</th>
+              <th>折價券</th>
+            </tr>
+            <tr ng-repeat="ds in oMonthSheet_D" ng-class="{'bg-info':ds.date=='total'}">
+              <td style="text-align:center">{{ds.date}}</td>
+              <td style="text-align:right">{{ds.ar|number}}</td>
+              <td style="text-align:right">{{ds.cash|number}}</td>
+              <td style="text-align:right">{{ds.coupon|number}}</td>
+            </tr>
+          </table>
+
+          <table ng-if="classifyBy=='Product'" width="100%" border="1" align="center">
+            <tr>
+              <th>商品</th>
+              <th>數量</th>
+              <th>金額</th>
+            <tr ng-repeat="dsp in oMonthSheet_P" ng-class="{'bg-info':dsp.product=='合　　計'}">
+              <td ng-style="dsp.product=='合　　計' &&{'text-align':'center'}">{{dsp.product}}</td>
+              <td style="text-align:right">{{dsp.qty|number}}</td>
+              <td style="text-align:right">{{dsp.ar|number}}</td>
+            </tr>
+          </table>
+          <table ng-if="classifyBy=='Category'" width="100%" border="1" align="center">
+            <tr>
+              <th>類別</th>
+              <th>數量</th>
+              <th>金額</th>
+            <tr ng-repeat="dsp in oMonthSheet_C" ng-class="{'bg-info':dsp.cat=='合　　計'}">
+              <td ng-style="dsp.cat=='合　　計' &&{'text-align':'center'}"><span class="btn btn-sm" ng-show="dsp.cat=='合　　計'">{{dsp.cat}}</span><span class="btn btn-sm" ng-repeat="cat in cats" ng-show="cat.id==dsp.cat">{{cat.name}}</span></td>
+              <td style="text-align:right">{{dsp.qty|number}}</td>
+              <td style="text-align:right">{{dsp.ar|number}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          &nbsp;
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal_history_items 秀出訂單列表 -->
+  <div class="modal" ui-if="modal_history_items" ui-shared-state="modal_history_items">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="proccessing" ng-show="loading">
+          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        </div>
+        <div class="modal-header">
+          <h4 class="modal-title">
+            <span class="btn btn-sm btn-default" ng-click="logout()" >{{realName}}</span>
+            			
+			<input ng-show="$parent.histType==0" class="bg-info" type="date" ng-model="pickedDate"  ng-change="showHistoryItems(true,0,'',pickedDate)">
+			
+			<span class="btn btn-sm btn-default" ng-if="$parent.histType==1">{{customerPhone}}</span>
+  		  </h4>
+          <button ui-turn-off="modal_history_items" class="btn btn-sm btn-default pull-right" ng-click="showHistoryItems(false,0)"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+		  <div class="list-group">
+            <div class="list-group-item" ng-repeat=" oh in oHistoryItems  | orderBy: '$index':false " ng-click="showHistoryItem($index)">
+              <div style="line-height:1.5rem;min-height:1.5rem;">
+                <span class="btn btn-xs btn-primary" ng-if="histType>1">{{oh.datetime_i.substring(0,10)}}</span><span class="btn btn-xs btn-default">編號 {{oh.oid}}</span><span class="btn btn-xs btn-default">{{oh.resrvType}}</span><span class="btn btn-xs btn-default" ng-show="oh.resrvTime>'0'">預約</span><span class="btn btn-xs btn-default" ng-show="oh.resrvTime>'0'">{{ oh.arrivalTime.substring(11,16)}}</span><span class="btn btn-xs btn-default" ng-show="oh.resrvType=='內用'">第{{oh.resrvTable}}桌</span><span class="btn btn-xs btn-default" ng-show="oh.resrvTime=='0'">{{oh.datetime_i.substring(11,16)}}</span><span class="btn btn-xs btn-default text-danger" ng-show="oh.customerPhone">{{oh.customerPhone}}</span>
+              </div>
+              <div style="line-height:1.5rem;min-height:1.5rem;">
+                <span ng-repeat="l in oh.log ">
+                	<span class="btn btn-xs btn-warning" style="margin: 0.1rem 0rem;">{{realNames[l.uid]}}</span><span style="margin: 0.1rem 0rem;" class="btn btn-xs" ng-if="l.action!='結帳'&&l.action!='沖帳'" ng-class="{'btn-danger':l.action=='作廢','btn-default':l.action!='作廢'}">{{l.action}}</span><span  ng-if="l.action=='結帳'"><span style="margin: 0.1rem 0rem;" class="btn btn-xs btn-info" ng-show="l.Cash>0">
+現{{l.Cash|number}}</span><span style="margin: 0.1rem 0rem;" class="btn btn-xs btn-success" ng-show="l.Ret>0">找{{l.Ret|number}}</span><span style="margin: 0.1rem 0rem;" class="btn btn-xs btn-success" ng-show="l.Coupon>0">
+券{{l.Coupon|number}}</span>
+		</span>
+              </div>
+              <div>
+                <span ng-show="oh.orderMemo" class="btn btn-xs btn-default">{{oh.orderMemo}}</span>
+              </div>
+              <!--div class="list-group">
+                <div class="list-group-item" style="font-size:0.8rem;line-height:1.2rem;min-height:1.2rem"
+				ng-repeat=" it in oh.myItems ">
+				  <span class="pull-left">{{it.name}}</span>&nbsp;<span class="btn btn-xs btn-default">x{{it.quantity}}</span>
+                  
+				  <span class="pull-right">
+                    <span ng-show="it.discount>0">{{it.price+it.addup}}x{{it.quantity}}-{{it.discount}}={{(it.price+it.addup)*it.quantity-it.discount}}</span>
+                    <span ng-show="it.discount==0">{{it.price+it.addup}}x{{it.quantity}}={{(it.price+it.addup)*it.quantity}}</span>
+                  </span>
+				  
+				  <span ng-repeat="op in it.options | filter:{checked:true}" class="btn btn-xs btn-success">{{op.name}}</span>
+                  <span ng-repeat="op in it.options | filter:{price:0}" ng-if="op.selected != null" class="btn btn-xs btn-success">{{op.selected}}</span>
+                  <span ng-if="it.memo.length>0" class="btn btn-xs btn-warning">{{it.memo}}</span>
+				  
+                  
+                </div>
+              </div-->
+			
+              <div class="btn btn-xs btn-default pull-right" style="color: red !important;line-height:none" ng-repeat=" l in oh.log" ng-show="l.Debtor && l.action=='結帳'">{{l.Debtor}}</div>
+			  <div class="btn btn-xs">&nbsp;</div>
+			  <div class="pull-right" style="font-size:0.8rem;line-height:1rem;">合計: {{ oAR=sumItems(oh.myItems) |number}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <!--label ng-show="$parent.histType==0" class="btn btn-sm btn-default"><input type="checkbox" value="true" ng-model="onlyNew">未完成</label-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal_history_item 秀出歷史記錄中的某一個訂單 -->
+  <div class="modal" ui-if="modal_history_item" ui-shared-state="modal_history_item">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button ui-turn-off="modal_history_item" class="btn btn-default pull-right btn-sm"><i class="fa fa-times"></i></button>
+          <h4 class="modal-title">
+		    <span class="btn btn-xs btn-primary" ng-if="histType>1">{{oHistoryItem.datetime_i.substring(0,10)}}</span>
+				<span class="btn btn-xs btn-default">編號 {{oHistoryItem.oid}}</span><span class="btn btn-xs btn-default">{{oHistoryItem.resrvType}}</span><span class="btn btn-xs btn-default" ng-show="oHistoryItem.resrvTime>'0'">預約</span><span class="btn btn-xs btn-default" ng-show="oHistoryItem.resrvTime>'0'">{{ oHistoryItem.arrivalTime.substring(11,16)}}</span><span class="btn btn-xs btn-default" ng-show="oHistoryItem.resrvType=='內用'">第{{oHistoryItem.resrvTable}}桌</span><span class="btn btn-xs btn-default" ng-show="oHistoryItem.resrvTime=='0'">{{oHistoryItem.datetime_i.substring(11,16)}}</span><span class="btn btn-xs btn-default text-danger" ng-show="oHistoryItem.customerPhone">{{oHistoryItem.customerPhone}}</span>
+           </h4>
+        </div>
+        <div class="modal-body">
+          <div class="list-group">
+            <div class="list-group-item" style="font-size:0.8rem;line-height:1.2rem;min-height:1.2rem" ng-repeat=" oi in oHistoryItem.myItems track by $index">
+              <div class="pull-left">{{oi.name}}</div>
+              <div class="pull-right">
+                <span ng-show="oi.discount>0">{{oi.price+oi.addup}}x{{oi.quantity}}-{{oi.discount}}={{(oi.price+oi.addup)*oi.quantity-oi.discount}}</span>
+                <span ng-show="oi.discount==0">{{oi.price+oi.addup}}x{{oi.quantity}}={{(oi.price+oi.addup)*oi.quantity}}</span>
+              </div>
+              <div ng-repeat="op in oi.options | filter:{checked:true}" class="btn btn-xs btn-success" style="margin-left:2px">{{op.name}}</div>
+              <div ng-repeat="op in oi.options | filter:{price:0}" ng-if="op.selected != null" class="btn btn-xs btn-success" style="margin-left:2px">{{op.selected}}</div>
+              <div ng-if="oi.memo.length>0" class="btn btn-xs btn-warning" style="margin-left:2px">{{oi.memo}}</div>
+            </div>
+            <div><span ng-show="oHistoryItem.orderMemo" class="btn btn-xs btn-default">{{oHistoryItem.orderMemo}}</span></div>
+     <div class="list-group-item">
+             <div class="btn btn-xs btn-default" style="color: red !important; float=none;" ng-repeat=" l in oHistoryItem.log" ng-if="l.Debtor && l.action=='結帳'">{{l.Debtor}}</div>
+                <div class="pull-right" style="font-size:0.8rem;">合計: {{ oAR=sumItems(oHistoryItem.myItems) |number}}</div></div>
+          </div>
+		  <div class="proccessing" ng-show="loading">
+          <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+          </div>  
+          <div ng-if="oCashing==false">
+            <button ng-if="oHistoryItem.status!='結帳' && oHistoryItem.status!='沖帳' && oHistoryItem.status!='作廢'" ng-click="setCashing(true)" class="btn btn-primary btn-md">結帳</button>
+            <button ng-if="oHistoryItem.status!='作廢'" ng-click="showDialog('提醒','確認要作廢嗎?','voidOrder(oHistoryItem)')" class="btn btn-warning btn-md pull-right">我要作廢</button>
+			
+          </div>
+          <div ng-if="oCashing==true"  ng-init="oCash=0;oRet=0;oCoupon=0;oCredit=0">
+            <div>
+              <div style="text-align:left;padding:0.1rem;">應收：{{oAR}}</div>
+              <div style="text-align:left;padding:0.1rem;float:left;">現金：
+			  <input type="number" ng-model="oCash" style="width:3rem;"></div>
+              <div style="text-align:left;padding:0.1rem;margin-left:1rem">禮券：
+			  <input type="number" ng-model="oCoupon" style="width:3rem;"></div>
+			  
+              <div ng-if="oCash+oCoupon+oCredit>=oAR" style="text-align:right;margin-top:0.5rem;">
+              <span class="btn btn-sm btn-default">找零：{{oReturn=oCash-(oAR>(oCoupon+oCredit) ? oAR-(oCoupon+oCredit) : 0 )}}</span>
+              <span class="btn btn-md btn-primary" ng-click="showDialog('提醒','確認結帳完成了嗎?','check(oHistoryItem,'+oAR+','+oCash+','+oReturn+','+oCoupon+','+oCredit+',\''+oDebtor+'\')')">確認</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div>
+		  <span ng-repeat="l in oHistoryItem.log ">
+                <span class="btn btn-xs btn-warning" style="margin: 0.1rem 0rem;">{{realNames[l.uid]}}</span>
+			  <span style="margin: 0.1rem 0rem;" 
+				class="btn btn-xs" ng-if="l.action!='結帳' && l.action!='沖帳'" ng-class="{'btn-danger':l.action=='作廢','btn-default':l.action!='作廢'}">{{l.action}}</span>
+			  <span  ng-if="l.action=='結帳'">
+				  <span style="margin: 0.1rem 0rem;" class="btn btn-xs btn-info" ng-show="l.Cash>0">現{{l.Cash|number}}</span>
+				  <span style="margin: 0.1rem 0rem;" class="btn btn-xs btn-success" ng-show="l.Ret>0">找{{l.Ret|number}}</span>
+				  <span style="margin: 0.1rem 0rem;" class="btn btn-xs btn-success" ng-show="l.Coupon>0">券{{l.Coupon|number}}</span>
+			  </span>
+			  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal_general 通用對話框 -->
+  <div class="modal" ui-if="modal_general" ui-shared-state="modal_general">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{dialog.title}}</h4>
+          <button class="btn btn-default pull-right  btn-sm" ng-click="Ui.turnOff('modal_general')"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+          {{dialog.content}}
+        </div>
+        <div class="modal-footer bg-info">
+          <button class="btn btn-danger btn-md" ng-click="$eval(dialog.callback);Ui.turnOff('modal_general')">確認</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>自食齊力POS系統 2.06</title>
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.3/css/mobile-angular-ui-base.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.3/css/mobile-angular-ui-hover.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.3/css/mobile-angular-ui-desktop.css">
+
+  <!-- for angular -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.3/js/mobile-angular-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.3/js/mobile-angular-ui.gestures.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
+
+  <style>
+  
+    html {
+      font-size: 3.3vh;
+    }
+  
+    /*gradient banner background*/
+    
+    .navbar {
+      background-image: linear-gradient(89deg, #30BDED 0, #2085C5 100%);
+      height: 2rem !important;
+	  min-height: 2rem !important;
+    }
+  
+    
+    .navbar-brand {
+      color: white;
+      font-size: 1rem !important;
+      height: 2rem !important;
+      line-height: 2rem !important;
+      padding: 0;
+	  min-height: 2rem !important;
+	  text-align:center !important;
+	  float:none;
+    }
+    
+    .list-group {
+      padding: 0.1rem;
+    }
+    
+    .list-group-item {
+      padding: 0.1rem;
+    }
+    
+    .page-header {
+      padding-bottom: 0.1rem;
+      margin: 0 0;
+    }
+    
+    .proccessing {
+      position: absolute;
+      z-index: 65535;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+	
+	body {
+	  max-width:60vh;
+	  margin: auto;
+	  backgroun-color: lightyelow;
+	}
+	
+	.has-navbar-top .app-body {
+		padding-top: 2rem !important;
+	}
+	
+	.has-navbar-bottom .app-body {
+		padding-bottom: 2rem !important;
+	}
+	
+	
+  </style>
+  <script src="myapp.js.php"></script>
+
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl" ng-init="authenticated=false">
+  <div ui-yield-to="modals"></div>
+  <div class="app">
+    
+    <!--頂端橫幅 -->
+    <div class="navbar navbar-app navbar-absolute-top" style="margin:auto">
+      <div class="navbar-brand">
+        <span>自食齊力POS系統</span>
+      </div>
+    </div>
+
+    <!--底端橫幅 -->
+    <div ng-if="authenticated===true" class="navbar navbar-app navbar-absolute-bottom">
+      <div class="btn-group justified">
+        <div class="btn" style="color:white;line-height:2rem;font-size:0.8rem" ng-click="showDaySheet(pickedDate)">日報表</div>
+        <div class="btn" style="color:white;line-height:2rem;font-size:0.8rem" ng-click="showMonthSheet(pickedMonth)">月報表</div>
+      </div>
+    </div>
+    
+	<!--中間主要顯示區 -->
+    <div class='app-body'>
+      <div class='app-content bg-warning'>
+        <ng-view></ng-view>
+      </div>
+    </div>
+	
+  </div>
+ 
+</body>
+
+</html>
