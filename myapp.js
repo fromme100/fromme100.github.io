@@ -12,6 +12,7 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
 
+  var wsUrl='https://fromme100.herokuapp.com/';
   angular.element(document).ready(function() {
 	$scope.init();    
 	window.location.href='./#menu';
@@ -72,7 +73,7 @@ app.controller('myCtrl', function($scope, $http) {
   
   $scope.setInitialMoney = function(begin) {
 	  $scope.loading=true;
-      $http.get('setInitialMoney.php?begin=' + begin).then(function(response) {
+      $http.get(wsUrl+'setInitialMoney.php?begin=' + begin).then(function(response) {
 	    var result=response.data.trim();
 		if (result == 'OK') {
           $scope.Ui.turnOff('modal_initial_money');
@@ -188,7 +189,7 @@ app.controller('myCtrl', function($scope, $http) {
 	      $scope.mydate = myY + '-' + myM + '-' +myD;
         }
 		
-		$http.get('getHistoryItems.php?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
+		$http.get(wsUrl+'getHistoryItems.php?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
 	    	$scope.loading=false;
 		  	$scope.oHistoryItems=res.data;
         }, function(err) {
@@ -202,7 +203,7 @@ app.controller('myCtrl', function($scope, $http) {
     	if($scope.customerPhone == undefined ) return;
     	if(show) {$scope.Ui.turnOn('modal_history_items');$scope.loading=true;}
     	
-    	$http.get('getCustomerItems.php?store='+$scope.store+'&customerPhone='+$scope.customerPhone).then(function(res) {
+    	$http.get(wsUrl+'getCustomerItems.php?store='+$scope.store+'&customerPhone='+$scope.customerPhone).then(function(res) {
     		$scope.loading=false;
           $scope.oHistoryItems=res.data;
     	  
@@ -218,7 +219,7 @@ app.controller('myCtrl', function($scope, $http) {
 		else $scope.Debtor=query;
 		
 		
-		$http.get('getDebtorItems.php?store='+$scope.store+'&Debtor='+$scope.Debtor).then(function(res) {
+		$http.get(wsUrl+'getDebtorItems.php?store='+$scope.store+'&Debtor='+$scope.Debtor).then(function(res) {
 	    	$scope.loading=false;
 		    $scope.oHistoryItems=res.data;
 			
@@ -329,7 +330,7 @@ app.controller('myCtrl', function($scope, $http) {
 	  'orderMemo': oMemo
     };
 	$scope.loading=true;
-    $http.post('submitOrder.php', submitOrder ).then(function(response) {
+    $http.post(wsUrl+'submitOrder.php', submitOrder ).then(function(response) {
 	  $scope.loading=false;
 	  submitOrder = response.data;
 	  $scope.oHistoryItem = submitOrder;
@@ -351,7 +352,7 @@ app.controller('myCtrl', function($scope, $http) {
 	if(!$scope.staff) return;
 	var mongoid=o._id['$oid'];
 	$scope.loading=true;
-	$http.get('setVoidOrder.php?mongoid='+mongoid+'&uid='+$scope.myUID).then( function(response) {
+	$http.get(wsUrl+'setVoidOrder.php?mongoid='+mongoid+'&uid='+$scope.myUID).then( function(response) {
         $scope.loading=false;
     	if(response.data=='SUCCESS') {
 			   $scope.Ui.turnOff('modal_history_item');
@@ -385,7 +386,7 @@ app.controller('myCtrl', function($scope, $http) {
       $scope.loading=true;
 	  console.log(mongoid,o);
 	  
-	  $http.get('setCheckedItem.php?mongoid='+mongoid+'&uid='+$scope.myUID+'&AR='+ar+'&Cash='+cash+'&Ret='+ret+'&Coupon='+coupon+'&Credit='+credit+'&Debtor='+debtor).then( function(response) {
+	  $http.get(wsUrl+'setCheckedItem.php?mongoid='+mongoid+'&uid='+$scope.myUID+'&AR='+ar+'&Cash='+cash+'&Ret='+ret+'&Coupon='+coupon+'&Credit='+credit+'&Debtor='+debtor).then( function(response) {
 		   $scope.loading=false;
 		   if(response.data=='SUCCESS') {
 			   $scope.Ui.turnOff('modal_history_item');
@@ -405,7 +406,7 @@ app.controller('myCtrl', function($scope, $http) {
 	if(!$scope.staff) return;
 	var mongoid=o._id['$oid'];
 	$scope.loading=true;
-	$http.get('strikeBalance.php?mongoid='+mongoid+'&uid='+$scope.myUID+'&Strike='+strike+'&Debtor='+debtor).then( function(response) {
+	$http.get(wsUrl+'strikeBalance.php?mongoid='+mongoid+'&uid='+$scope.myUID+'&Strike='+strike+'&Debtor='+debtor).then( function(response) {
         $scope.loading=false;
     	if(response.data=='SUCCESS') {
 		   $scope.Ui.turnOff('modal_history_item');
@@ -429,7 +430,7 @@ app.controller('myCtrl', function($scope, $http) {
 	var myD = ('0'+d.getDate()).slice(-2);
 	$scope.mydate = myY + '-' + myM + '-' +myD;
 	$scope.loading=true;
-    $http.get('getDaySheet.php?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
+    $http.get(wsUrl+'getDaySheet.php?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
       $scope.loading=false;
       if (res.data == null) return;
       $scope.oDaySheet=res.data.byCashier;
@@ -451,8 +452,8 @@ app.controller('myCtrl', function($scope, $http) {
 	var myM = ('0'+(d.getMonth()+1)).slice(-2);
 	var mydate = myY + '-' + myM;
 	$scope.loading=true;
-	$http.get('getMonthSheet.php?store='+$scope.store+'&mydate='+mydate).then(function(res) {
-      $scope.loading=false;
+	$http.get(wsUrl+'getMonthSheet.php?store='+$scope.store+'&mydate='+mydate).then(function(res) {
+	  $scope.loading=false;
 	  console.log(angular.toJson(res.data));
 	  if (res.data == null) return;
       $scope.oMonthSheet=res.data.byCashier;
@@ -468,7 +469,7 @@ app.controller('myCtrl', function($scope, $http) {
   $scope.showDebtorList = function() {
 	if(!$scope.staff) return;
 	$scope.loading=true;
-    $http.get('getDebtorList.php').then(function(res) {
+    $http.get(wsUrl+'getDebtorList.php').then(function(res) {
       
 	  $scope.loading=false;
 	  if (res.data == null) $scope.oDebtors=[];
