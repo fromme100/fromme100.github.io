@@ -13,7 +13,7 @@ app.config(function($routeProvider) {
 app.controller('myCtrl', function($scope, $http) {
 
   //var wsUrl='https://fromme100.herokuapp.com/';
-  var wsUrl='https://hanas01.tcust.csie.org/fromme100/';
+  var wsUrl='http://fromme100.byethost7.com/';
   angular.element(document).ready(function() {
 	$scope.init();    
 	window.location.href='./#menu';
