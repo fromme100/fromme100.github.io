@@ -12,13 +12,13 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
 
-  const getHistoryItems = 'https://script.google.com/macros/s/AKfycbwLo1sHPE4Y87bBFbdQew82xViahNTcgSOjINiEqC3BwpFm6wUKEmU0vxMYzFEDpTBm/exec';
+  const getHistoryItems = 'https://script.google.com/macros/s/AKfycbwRSrwYw5E5m7SVaoKLIGHM1swnpLBimZI1v8Khjl_hppKl0LJiv5xrufpoAuiVJ4LU/exec';
   //const getHistoryItems = 'ws/getHistoryItems.php'; 
 
-  const getDaySheet =   'https://script.google.com/macros/s/AKfycbycek8Cu-KXI7fmbGMk5qhPAvC60xVyeQG1lllim1hUGLcYHPDmC9gAMazHftwRZSQ6/exec';
+  const getDaySheet =   'https://script.google.com/macros/s/AKfycbwWonALr-i7SnqzYJi8WsibbPzTgUqYSU_QqOY5kyTcpClZp07VBEqJqMyMSABkcUGi/exec';
   //const getDaySheet = 'ws/getDaySheet.php';
   
-  const getMonthSheet = 'https://script.google.com/macros/s/AKfycbwVk4ZZAwkYRjFXVROTNf4AJtYqV-dNEWun1TIWlNY0dcArdGHFIYJ03iHCpkCcs6gq/exec';
+  const getMonthSheet = 'https://script.google.com/macros/s/AKfycbztINf1uW4JsB26pTZu9QTM9jeBYgqlpIXuLSnfYjoQeC-VwaBUUZWqurZ4T3f6gWMA/exec';
   //const getMonthSheet = 'ws/getMonthSheet.php';
   
   const setCheckedItem = 'ws/setCheckedItem.php';
