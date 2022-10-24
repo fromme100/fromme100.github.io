@@ -6,25 +6,22 @@ var app = angular.module('myApp', [
 app.config(function($routeProvider) {
   $routeProvider
     .when("/menu", {
-      templateUrl: "menu.html"	  
+      templateUrl: "menu.php"	  
     });
 });
 
 app.controller('myCtrl', function($scope, $http) {
 
-  const getHistoryItems = 'https://script.google.com/macros/s/AKfycbwRSrwYw5E5m7SVaoKLIGHM1swnpLBimZI1v8Khjl_hppKl0LJiv5xrufpoAuiVJ4LU/exec';
-  //const getHistoryItems = 'ws/getHistoryItems.php'; 
-
-  const getDaySheet =   'https://script.google.com/macros/s/AKfycbwWonALr-i7SnqzYJi8WsibbPzTgUqYSU_QqOY5kyTcpClZp07VBEqJqMyMSABkcUGi/exec';
-  //const getDaySheet = 'ws/getDaySheet.php';
-  
-  const getMonthSheet = 'https://script.google.com/macros/s/AKfycbztINf1uW4JsB26pTZu9QTM9jeBYgqlpIXuLSnfYjoQeC-VwaBUUZWqurZ4T3f6gWMA/exec';
-  //const getMonthSheet = 'ws/getMonthSheet.php';
-  
-  const setCheckedItem = 'ws/setCheckedItem.php';
-  const setVoidOrder = 'ws/setVoidOrder.php';
-  const submitOrder = 'ws/submitOrder.php';
-  
+  const checkLogin_URL = 'https://script.google.com/macros/s/AKfycbz8vWuxfmL4mxj1CsCwtZ_n7bStFlZPRPgKYdXZ5sSjwDxbtb2-/exec';
+  const getRealName_URL = 'https://script.google.com/macros/s/AKfycbxBoC4gWhleKATW-OH22XfDM85Z3wrvXoMVb9NLsQZbVVahyd8/exec';
+  const getCats_URL = 'https://script.google.com/macros/s/AKfycby68whl-0C6dhds4hE_SOJ9120Bh-WuN0NHh-zVp48QnLSCmgSD/exec';
+  const getProducts_URL = 'https://script.google.com/macros/s/AKfycbywdB4QWsHFXN4SiRCSHonQSRnR3LXGtuQJhu0FTKI8PCBjAHVB/exec';
+  const getHistoryItems_URL = 'https://script.google.com/macros/s/AKfycbwRSrwYw5E5m7SVaoKLIGHM1swnpLBimZI1v8Khjl_hppKl0LJiv5xrufpoAuiVJ4LU/exec'; 
+  const getDaySheet_URL = 'https://script.google.com/macros/s/AKfycbwWonALr-i7SnqzYJi8WsibbPzTgUqYSU_QqOY5kyTcpClZp07VBEqJqMyMSABkcUGi/exec';
+  const getMonthSheet_URL = 'https://script.google.com/macros/s/AKfycbztINf1uW4JsB26pTZu9QTM9jeBYgqlpIXuLSnfYjoQeC-VwaBUUZWqurZ4T3f6gWMA/exec';
+  const setCheckedItem_URL = 'https://script.google.com/macros/s/AKfycbw2QYRcT88_PrdZ-R-pqSEs3yt4kjmQgKortVqQ3s6W8NzNGpgJusKCGxWLi-mlG1yI/exec';
+  const setVoidOrder_URL = 'https://script.google.com/macros/s/AKfycbwxnSs8YXkAPuQT8x6DFHKDZmSM_OpnYVUbFHDijgsi_rz5NvrugoeskjMUEvgp4-oy/exec';
+  const submitOrder_URL = 'https://script.google.com/macros/s/AKfycbw8Rk91zsvqvycoOSVMwCQ72u3-9_B-5PgzWG8Itshmy8phmvZ2CBwEUE4nFmCpjT-NHQ/exec';
 
   angular.element(document).ready(function() {
 	$scope.init();    
@@ -42,81 +39,37 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.myPass = '';
     $scope.Ui.turnOn('modal_login');
   };
-
-  $scope.checkInitialMoney = function() {
-	  return true;
-	  //if($scope.realNames == undefined ) return false;
-	  //if($scope.realNames[$scope.today] == undefined ) return false;
-	  //if(parseInt($scope.realNames[$scope.today]) == 0) return false;
-	  //$scope.initialMoney=parseInt($scope.realNames[$scope.today]); 
-	  //return true;
-  };
-  
+   
   $scope.checkLogin = function(myU, myP, store) {
 	$scope.loading=true;
 	$scope.loginMessage = '驗證中...';
-    	$http.get('https://script.google.com/macros/s/AKfycbz8vWuxfmL4mxj1CsCwtZ_n7bStFlZPRPgKYdXZ5sSjwDxbtb2-/exec?user=' + myU + '&pass=' + myP)
+    $http.get(checkLogin_URL+'?user=' + myU + '&pass=' + myP)
 	.then(function(response) {
 	  if(response.data) {
 		 result=response.data.substring(0,2);
 		 $scope.realName=response.data.substring(2);
-		 //result='OK';
-		 //$scope.realName='QQQ';
 	  }
 	  else result='';
-      	  if (result == 'OK') {
+      if (result == 'OK') {
 		$scope.loginMessage = '驗證成功!!';
-        	$scope.Ui.turnOff('modal_login');
-        	$scope.authenticated = true;
+        $scope.Ui.turnOff('modal_login');
+        $scope.authenticated = true;
 		$scope.myUID = myU;
 		$scope.myPass = myP;
 		$scope.store = store;
-		$scope.staff = true;
 		$scope.sto=$scope.showHistoryItems(false,0);
-		//if(!$scope.checkInitialMoney()) $scope.showInitialMoney();
-      	  } else {
+	  } else {
         	$scope.loginMessage = "帳密錯誤!!";
-      	  }
+      }
 	  $scope.loading=false;
     }, function(err) {
-	  	  $scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
-	  $scope.loading=false;
+	  	$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
+		$scope.loading=false;
     });
-  };
-  
-  $scope.setInitialMoney = function(begin) {
-	  $scope.loading=true;
-      $http.get('setInitialMoney.php?begin=' + begin).then(function(response) {
-	    var result=response.data.trim();
-		if (result == 'OK') {
-          $scope.Ui.turnOff('modal_initial_money');
-		  $scope.realNames[$scope.today]=begin; 
-		  //奧義:realNames[$scope.today]表示開帳金額;
-        } else {
-          $scope.showDialog('開帳失敗','不明原因', '');
-        }
-	    $scope.loading=false;
-      }, function(err) {
-        $scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
-	    $scope.loading=false;
-    });
-  };
-  
-  $scope.showInitialMoney = function() {
-	  if($scope.checkInitialMoney()) return;
-	  $scope.Ui.turnOn('modal_initial_money');
   };
   
   $scope.logout = function() {
 	  window.location.reload();
-  };
-
-  $scope.switchStore = function() {
-      //if(!$scope.staff) return;
-      return;
-      if($scope.store=='zhizhu') $scope.store='gallery' ;
-      else if($scope.store=='gallery') $scope.store='zhizhu' ;
-	  $scope.showHistoryItems(false,0);
   };
 
   $scope.showDialog = function(t, c, f) {
@@ -174,7 +127,8 @@ app.controller('myCtrl', function($scope, $http) {
   $scope.showHistoryItem = function(index) {
     $scope.Ui.turnOn('modal_history_item');
     $scope.currentHistoryIndex = index;
-	$scope.oHistoryItem = $scope.oHistoryItems[$scope.currentHistoryIndex];$scope.oCashing=false;
+	$scope.oHistoryItem = $scope.oHistoryItems[$scope.currentHistoryIndex];
+	$scope.oCashing=false;
   };
   
   
@@ -184,22 +138,21 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.loading=true;
 	}
 	
-	if(d!=null) {
+	if(d) {
 		var myY = d.getFullYear();
 		var myM = ('0'+(d.getMonth()+1)).slice(-2);
 		var myD = ('0'+d.getDate()).slice(-2);
 		$scope.mydate = myY + '-' + myM + '-' +myD;
     }
 		
-	$http.get(getHistoryItems+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
-	    	$scope.loading=false;
-		  	$scope.oHistoryItems=res.data;
-        }, function(err) {
+	$http.get(getHistoryItems_URL+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
+	    $scope.loading=false;
+		$scope.oHistoryItems=res.data;
+    }, function(err) {
 		$scope.oHistoryItems=[];
-	    	$scope.loading=false;
-          	$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
-	    }
-	);
+	   	$scope.loading=false;
+       	$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
+	});
   };
   
   $scope.stopRefresh = function() {
@@ -256,8 +209,7 @@ app.controller('myCtrl', function($scope, $http) {
 	return total;
   };
 
-  $scope.orderSubmit = function(rsvType, rsvTime, rsvTable, custPhone,custType,oMemo) {
-	//checkToday
+  $scope.orderSubmit = function(rsvType,rsvTable,oMemo) {
 	var d=new Date();
 	var myY = d.getFullYear();
 	var myM = ('0'+(d.getMonth()+1)).slice(-2);
@@ -267,39 +219,25 @@ app.controller('myCtrl', function($scope, $http) {
 	};
 	
 	rsvType=rsvType || '';
-	rsvTime=rsvTime || '0';
 	rsvTable=rsvTable || '0';
-	custPhone=custPhone || '';
-	custType=custType || '';
 	oMemo=oMemo || '';
     if ($scope.myUID=='') {
       $scope.login();
       return;
     }
-	if (!$scope.staff && custPhone.length!=10) {
-		$scope.showDialog('提醒','請輸入手機號碼','');
-		return;
-	}
-	/*if (custType=='') {
-		$scope.showDialog('提醒','請選擇顧客類別是教職員還是學生?','');
-		return;
-	}*/
-    $scope.submitAck = "";
+	
+	$scope.submitAck = "";
     if (rsvType == '外帶') rsvTable = '0';
-    if (rsvType == '內用') rsvTime = '0';
     var orderPayload = {
       'myItems': $scope.oItems,
       'resrvType': rsvType,
-      'resrvTime': rsvTime,
       'resrvTable': rsvTable,
       'myUID': $scope.myUID,
 	  'store': $scope.store,
-	  'customerPhone': custPhone,
-	  'customerType': custType,
 	  'orderMemo': oMemo
     };
 	$scope.loading=true;
-    $http.post(submitOrder,orderPayload).then(function(response) {
+	$http.get(submitOrder_URL+'?data='+JSON.stringify(orderPayload)).then(function(response) {
 	  $scope.loading=false;
 	  orderPayload = response.data;
 	  $scope.oHistoryItem = orderPayload;
@@ -318,44 +256,36 @@ app.controller('myCtrl', function($scope, $http) {
 
  
   $scope.voidOrder = function(o) {
-	if(!$scope.staff) return;
 	var mongoid=o._id;
 	$scope.loading=true;
-	$http.get(setVoidOrder+'?mongoid='+mongoid+'&uid='+$scope.myUID).then( function(response) {
+	$http.get(setVoidOrder_URL+'?mongoid='+mongoid+'&uid='+$scope.myUID).then( function(response) {
         $scope.loading=false;
     	if(response.data=='SUCCESS') {
-			   $scope.Ui.turnOff('modal_history_item');
-			   if($scope.oHistoryItems.length>0)$scope.lastOID=$scope.oHistoryItems[$scope.oHistoryItems.length-1].oid;
-			   else $scope.lastOID=0;
-			   $scope.showHistoryItems(false,0);
-		   }
-		   else if(response.data=='DUP') $scope.showDialog('提醒','本單已按過「作廢」','');
-		   else $scope.showDialog('錯誤','請稍後再試一次','');
-		}, function(err){
-		   $scope.loading=false;
-           $scope.showDialog('錯誤',err.status+':'+err.statusText,'');
-		});
+			$scope.Ui.turnOff('modal_history_item');
+			if($scope.oHistoryItems.length>0)$scope.lastOID=$scope.oHistoryItems[$scope.oHistoryItems.length-1].oid;
+			else $scope.lastOID=0;
+			$scope.showHistoryItems(false,0);
+		}
+		else if(response.data=='DUP') $scope.showDialog('提醒','本單已按過「作廢」','');
+		else $scope.showDialog('錯誤','請稍後再試一次','');
+	}, function(err){
+	   $scope.loading=false;
+       $scope.showDialog('錯誤',err.status+':'+err.statusText,'');
+	});
   };
 	
   $scope.setCashing = function(b) {
-	  if(!$scope.staff) return;
 	  $scope.oCashing=b;
 	  $scope.oCash='';
 	  $scope.oCoupon='';
-	  $scope.oCredit='';  
   };
 
-  $scope.check = function(o,ar,cash,ret,coupon,credit,debtor) {
-	  if(!$scope.staff) return;
-	  if(credit>0 && debtor.length<2) {
-		  alert('信用人不得空白');
-		  return;
-	  }
+  $scope.check = function(o,ar,cash,ret,coupon) {
 	  var mongoid=o._id;
       $scope.loading=true;
-	  //console.log(mongoid,o);
+	  cash = cash || 0;
 	  
-	  $http.get(setCheckedItem+'?mongoid='+mongoid+'&uid='+$scope.myUID+'&AR='+ar+'&Cash='+cash+'&Ret='+ret+'&Coupon='+coupon+'&Credit='+credit+'&Debtor='+debtor).then( function(response) {
+	  $http.get(setCheckedItem_URL+'?mongoid='+mongoid+'&uid='+$scope.myUID+'&AR='+ar+'&Cash='+cash+'&Ret='+ret+'&Coupon='+coupon).then( function(response) {
 		   $scope.loading=false;
 		   if(response.data=='SUCCESS') {
 			   $scope.Ui.turnOff('modal_history_item');
@@ -363,25 +293,21 @@ app.controller('myCtrl', function($scope, $http) {
 		   }
 		   else if(response.data=='DUP') $scope.showDialog('提醒','本單已按過「結帳」','');
 		   else $scope.showDialog('錯誤','請稍後再試一次','');
-		   
-		}, function(err){
+	  }, function(err){
            $scope.loading=false;
 		   $scope.showDialog('錯誤',err.status+':'+err.statusText,'');
-		   
-		});
+	  });
   };
   
   $scope.showDaySheet = function(d) {
-	if(!$scope.staff) return;
 	$scope.Ui.turnOn('modal_day_sheet');
 	var myY = d.getFullYear();
 	var myM = ('0'+(d.getMonth()+1)).slice(-2);
 	var myD = ('0'+d.getDate()).slice(-2);
 	$scope.mydate = myY + '-' + myM + '-' +myD;
 	$scope.loading=true;
-    $http.get(getDaySheet+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
-      
-      if (res.data == null) return;
+    $http.get(getDaySheet_URL+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
+      if (!res.data) return;
       $scope.oDaySheet=res.data.byCashier;
 	  $scope.oDaySheet_P=res.data.byProduct;
 	  $scope.oDaySheet_C=res.data.byCategory;
@@ -393,13 +319,12 @@ app.controller('myCtrl', function($scope, $http) {
   };
   
   $scope.showMonthSheet = function(d) {
-	if(!$scope.staff) return;
 	$scope.Ui.turnOn('modal_month_sheet');
 	var myY = d.getFullYear();
 	var myM = ('0'+(d.getMonth()+1)).slice(-2);
 	var mydate = myY + '-' + myM;
 	$scope.loading=true;
-	$http.get(getMonthSheet+'?store='+$scope.store+'&mydate='+mydate).then(function(res) {
+	$http.get(getMonthSheet_URL+'?store='+$scope.store+'&mydate='+mydate).then(function(res) {
       if (res.data == null) return;
       $scope.oMonthSheet=res.data.byCashier;
       $scope.oMonthSheet_P=res.data.byProduct;
@@ -412,20 +337,6 @@ app.controller('myCtrl', function($scope, $http) {
     }); 
   };
 
-  $scope.setStaff = function(bool) {
-	 if(bool) {
-	     $scope.staff=true;
-		 $scope.myUID="";
-	 }
-     else {
-		 $scope.staff=false;
-		 $scope.myUID="guest";
-		 $scope.realName="顧客";
-		 $scope.authenticated=false;
-		 $scope.store="gallery";
-	 }	 
-  };
-  
   $scope.init = function() {
     var d=new Date();
 	var myY = d.getFullYear();
@@ -448,31 +359,26 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.oDaySheet_P = [];
 	$scope.oMonthSheet = [];
     $scope.oMonthSheet_P = [];
-	$scope.oDebtors = [];
 	$scope.oTemp = {};
     $scope.histType = '';
-	$scope.Debtor = '';
-    $scope.sto = '';
+	$scope.sto = '';
     $itemIndex = 0;
     $scope.submitAck = "";
     $scope.readySubmit = false;
     $scope.store = "gallery";
-	$scope.staff = false;
 	$scope.loginMessage = "";
     $scope.oCashing = false;
     $scope.pickedDate = new Date();
 	$scope.pickedMonth = new Date();
     $scope.classifyBy = "Cashier";
 	$scope.loading = false;
-	$scope.customerPhone='';
 	$scope.lastOID=0;
-	$scope.initialMoney=0;
-    $scope.nowCash=0;
+	$scope.nowCash=0;
 	$scope.customerType='';
 	$scope.authenticated=false;
 
 	//getRealNames
-	$http.get('https://script.google.com/macros/s/AKfycbxBoC4gWhleKATW-OH22XfDM85Z3wrvXoMVb9NLsQZbVVahyd8/exec').then(function(res) {
+	$http.get(getRealName_URL).then(function(res) {
       if (res.data == null) return;
       $scope.realNames=res.data;
 	  $scope.realNames['total']='合　　計';
@@ -480,14 +386,14 @@ app.controller('myCtrl', function($scope, $http) {
     }); 
 
 	//getCats
-	$http.get('https://script.google.com/macros/s/AKfycby68whl-0C6dhds4hE_SOJ9120Bh-WuN0NHh-zVp48QnLSCmgSD/exec').then(function(res) {
+	$http.get(getCats_URL).then(function(res) {
       if (res.data == null) return;
       $scope.cats=res.data;
 	  }, function(err) {
     }); 
 	
 	//getProducts
-	$http.get('https://script.google.com/macros/s/AKfycbywdB4QWsHFXN4SiRCSHonQSRnR3LXGtuQJhu0FTKI8PCBjAHVB/exec').then(function(res) {
+	$http.get(getProducts_URL).then(function(res) {
       if (res.data == null) return;
       $scope.products=res.data;
 	  }, function(err) {
