@@ -193,7 +193,7 @@
           </div>
         </div>
         <div class="modal-footer bg-info" ng-show="staff">
-          <button ng-click="checkLogin(myUID,myPASS,store)" class="btn btn-success  btn-sm" >登入</button>
+          <button ng-click="checkLogin(myUID,myPASS,store)" class="btn btn-success  btn-sm" ng-disabled="loginMessage.length>0">登入</button>
         </div>
       </div>
     </div>
