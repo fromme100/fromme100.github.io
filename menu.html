@@ -11,7 +11,7 @@
   width: auto !important;
   padding: 0.3rem;
   }
-  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus {
+  .activeTab {
   background-color: orange !important;
   color: white !important;
   width: auto !important;
@@ -145,16 +145,15 @@
     </div>
     <div class="col-xs-12">
       <ul class="nav nav-tabs">
-        <li ng-repeat="c in $parent.cats" ui-class="{'active': activeTab == {{c.id}}}">
-          <a ui-set="{'activeTab': c.id}">{{c.name}}</a>
+        <li ng-repeat="c in cats">
+          <a ng-click="setActiveTab(c.id)" ng-class="{'activeTab':(activeTab==c.id)}">{{c.name}}</a>
         </li>
       </ul>
     </div>
 
     <div class="col-xs-12">
-      <div ng-repeat="c in cats" ui-if="activeTab == {{c.id}}">
-        <!--h3 class="page-header">{{c.name}}</h3-->
-        <div class="list-group" style="font-size:0.8rem;margin-left:0.5rem;"	>
+      <div ng-repeat="c in cats" >
+        <div ng-show="activeTab == c.id" class="list-group" style="font-size:0.8rem;margin-left:0.5rem;"	>
           <div class="list-group-item" style="font-size:0.8rem" 
             ng-repeat=" x in products | filter: {cat:c.id}"
             ng-click="showItem(x);">
@@ -166,6 +165,7 @@
     </div>
   </div>
 </div>
+
 <!-- Modals and Overlays -->
 <div ui-content-for="modals">
   <!-- modal_login -->

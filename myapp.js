@@ -337,6 +337,10 @@ app.controller('myCtrl', function($scope, $http) {
     }); 
   };
 
+  $scope.setActiveTab = function(id) {
+    $scope.activeTab=id;
+  }
+
   $scope.init = function() {
     var d=new Date();
 	var myY = d.getFullYear();
@@ -350,7 +354,7 @@ app.controller('myCtrl', function($scope, $http) {
       callback: ''
     };
 
-	
+	$scope.activeTab = "1";
     $scope.oItem = {};
 	$scope.oItems = [];
 	$scope.oHistoryItems = [];
