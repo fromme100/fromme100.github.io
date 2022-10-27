@@ -136,7 +136,7 @@
   <!-- 列出所有menu -->
   <div class="scrollable scrollable-content bg-warning">
     <div style="padding: 0.8rem 0.8rem; display: inline-block;width:100%">
-      <span class="btn btn-md btn-default" ng-click="showHistoryItems(true,0,'',pickedDate)"><i class="fa fa-list"></i></span>
+      <span class="btn btn-md btn-default" ng-click="showHistoryItems(true)"><i class="fa fa-list"></i></span>
       <span ng-click="logout()" class="btn btn-md btn-default">{{realName}}</span>
       <div class="pull-right" style="margin-top:0.3rem">
         <span ng-click="showItemList()" class="badge" data-badge="{{oItems.length}}">
@@ -350,7 +350,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title"><span class="btn btn-sm btn-default">日報</span>&nbsp;&nbsp;<input class="bg-info" type="date" ng-model="pickedDate" ng-change="showDaySheet(pickedDate)"></h4>
+          <h4 class="modal-title"><span class="btn btn-sm btn-default">日報</span>&nbsp;&nbsp;<input class="bg-info" type="date" ng-model="pickedDate" ng-value="localDate(pickedDate)" ng-change="showDaySheet(pickedDate,true)"></h4>
           <button ui-turn-off="modal_day_sheet" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button>
         </div>
         <div class="modal-body" style="font-size:0.8rem">
@@ -370,34 +370,20 @@
               <th>收現</th>
               <th>折價券</th>
             </tr>
-            <tr ng-repeat="ds in oDaySheet" ng-class="{'bg-info':ds.uid=='total'}">
+            <tr ng-repeat="ds in oDaySheet.byCashier" ng-class="{'bg-info':ds.uid=='total'}">
               <td style="text-align:center"><span class="btn btn-sm">{{realNames[ds.uid]}}</span></td>
               <td style="text-align:right"><span class="btn btn-sm">{{ds.ar|number}}</span></td>
               <td style="text-align:right"><span class="btn btn-sm"  ng-class="{'btn-success':ds.uid=='total'}">{{ds.cash|number}}</span></td>
               <td style="text-align:right"><span class="btn btn-sm">{{ds.coupon|number}}</span></td>
             </tr>
           </table>
-		  <div ng-if="classifyBy=='Cashier' && oDaySheet_Strike['total']['Cash']>0" class="bg-danger" style="width:100%;padding:0.3rem;margin-top:0.2rem;font-size:0.6rem">
-		    <div  ng-show="key!='total'" ng-repeat="(key,value) in oDaySheet_Strike" >
-		      <div style="display:flex">
-		        <div style="width:3rem;">{{key}}</div>
-		        <div style="flex-grow:3">
-		          <ul style="padding-left: 0;">
-		            <li class="btn-underline" style="width:100%;display: flex;justify-content: space-between;" ng-repeat="(k,v) in value">
-		      	    <span>{{k}}</span>
-		      	    <span style="margin-top:0.1rem">{{v}}</span>
-		      	  </li>
-		          </ul>
-		        </div>
-		      </div>
-		    </div>
-		  </div>
+		  
           <table ng-if="classifyBy=='Product'" width="100%" border="1" align="center">
             <tr>
               <th>商品</th>
               <th>數量</th>
               <th>金額</th>
-            <tr ng-repeat="dsp in oDaySheet_P" ng-class="{'bg-info':dsp.product=='合　　計'}">
+            <tr ng-repeat="dsp in oDaySheet.byProduct" ng-class="{'bg-info':dsp.product=='合　　計'}">
               <td ng-style="dsp.product=='合　　計' &&{'text-align':'center'}"><span class="btn btn-sm">{{dsp.product}}</span></td>
               <td style="text-align:right"><span class="btn btn-sm">{{dsp.qty|number}}</span></td>
               <td style="text-align:right"><span class="btn btn-sm">{{dsp.ar|number}}</span></td>
@@ -408,7 +394,7 @@
               <th>類別</th>
               <th>數量</th>
               <th>金額</th>
-            <tr ng-repeat="dsp in oDaySheet_C" ng-class="{'bg-info':dsp.cat=='合　　計'}">
+            <tr ng-repeat="dsp in oDaySheet.byCategory" ng-class="{'bg-info':dsp.cat=='合　　計'}">
               <td ng-style="dsp.cat=='合　　計' &&{'text-align':'center'}"><span class="btn btn-sm" ng-show="dsp.cat=='合　　計'">{{dsp.cat}}</span><span class="btn btn-sm" ng-repeat="cat in cats" ng-show="cat.id==dsp.cat">{{cat.name}}</span></td>
               <td style="text-align:right"><span class="btn btn-sm">{{dsp.qty|number}}</span></td>
               <td style="text-align:right"><span class="btn btn-sm">{{dsp.ar|number}}</span></td>
@@ -428,7 +414,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title"><span class="btn btn-sm btn-default">月報</span>&nbsp;&nbsp;<input class="bg-info"  type="month" ng-model="pickedMonth" ng-change="showMonthSheet(pickedMonth)"></h4>
+          <h4 class="modal-title"><span class="btn btn-sm btn-default">月報</span>&nbsp;&nbsp;<input class="bg-info" type="month" ng-model="pickedMonth" ng-value="localDate(pickedMonth).slice(0,7)" ng-change="showMonthSheet(pickedMonth,true)"></h4>
           <button ui-turn-off="modal_month_sheet" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button>
         </div>
         <div class="modal-body">
@@ -450,7 +436,7 @@
               <th>收現</th>
               <th>折價券</th>
             </tr>
-            <tr ng-repeat="ds in oMonthSheet" ng-class="{'bg-info':ds.uid=='total'}">
+            <tr ng-repeat="ds in oMonthSheet.byCashier" ng-class="{'bg-info':ds.uid=='total'}">
               <td style="text-align:center">{{realNames[ds.uid]}}</td>
               <td style="text-align:right">{{ds.ar|number}}</td>
               <td style="text-align:right">{{ds.cash|number}}</td>
@@ -464,7 +450,7 @@
               <th>收現</th>
               <th>折價券</th>
             </tr>
-            <tr ng-repeat="ds in oMonthSheet_D" ng-class="{'bg-info':ds.date=='total'}">
+            <tr ng-repeat="ds in oMonthSheet.byDate" ng-class="{'bg-info':ds.date=='total'}">
               <td style="text-align:center">{{ds.date}}</td>
               <td style="text-align:right">{{ds.ar|number}}</td>
               <td style="text-align:right">{{ds.cash|number}}</td>
@@ -477,7 +463,7 @@
               <th>商品</th>
               <th>數量</th>
               <th>金額</th>
-            <tr ng-repeat="dsp in oMonthSheet_P" ng-class="{'bg-info':dsp.product=='合　　計'}">
+            <tr ng-repeat="dsp in oMonthSheet.byProduct" ng-class="{'bg-info':dsp.product=='合　　計'}">
               <td ng-style="dsp.product=='合　　計' &&{'text-align':'center'}">{{dsp.product}}</td>
               <td style="text-align:right">{{dsp.qty|number}}</td>
               <td style="text-align:right">{{dsp.ar|number}}</td>
@@ -488,7 +474,7 @@
               <th>類別</th>
               <th>數量</th>
               <th>金額</th>
-            <tr ng-repeat="dsp in oMonthSheet_C" ng-class="{'bg-info':dsp.cat=='合　　計'}">
+            <tr ng-repeat="dsp in oMonthSheet.byCategory" ng-class="{'bg-info':dsp.cat=='合　　計'}">
               <td ng-style="dsp.cat=='合　　計' &&{'text-align':'center'}"><span class="btn btn-sm" ng-show="dsp.cat=='合　　計'">{{dsp.cat}}</span><span class="btn btn-sm" ng-repeat="cat in cats" ng-show="cat.id==dsp.cat">{{cat.name}}</span></td>
               <td style="text-align:right">{{dsp.qty|number}}</td>
               <td style="text-align:right">{{dsp.ar|number}}</td>
@@ -514,17 +500,15 @@
           <h4 class="modal-title">
             <span class="btn btn-sm btn-default" ng-click="logout()" >{{realName}}</span>
             			
-			<input ng-show="$parent.histType==0" class="bg-info" type="date" ng-model="pickedDate"  ng-change="showHistoryItems(true,0,'',pickedDate)">
-			
-			<span class="btn btn-sm btn-default" ng-if="$parent.histType==1">{{customerPhone}}</span>
+			<input class="bg-info" type="date" ng-model="pickedDate"  ng-change="showHistoryItems(true,pickedDate)">
   		  </h4>
-          <button ui-turn-off="modal_history_items" class="btn btn-sm btn-default pull-right" ng-click="showHistoryItems(false,0)"><i class="fa fa-times"></i></button>
+          <button ui-turn-off="modal_history_items" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button>
         </div>
         <div class="modal-body">
 		  <div class="list-group">
             <div class="list-group-item" ng-repeat=" oh in oHistoryItems  | orderBy: '$index':false " ng-click="showHistoryItem($index)">
               <div style="line-height:1.5rem;min-height:1.5rem;">
-                <span class="btn btn-xs btn-primary" ng-if="histType>1">{{oh.datetime_i.substring(0,10)}}</span><span class="btn btn-xs btn-default">編號 {{oh.oid}}</span><span class="btn btn-xs btn-default">{{oh.resrvType}}</span><span class="btn btn-xs btn-default" ng-show="oh.resrvType=='內用'">第{{oh.resrvTable}}桌</span>
+                <span class="btn btn-xs btn-default">編號 {{oh.oid}}</span><span class="btn btn-xs btn-default">{{oh.resrvType}}</span><span class="btn btn-xs btn-default" ng-show="oh.resrvType=='內用'">第{{oh.resrvTable}}桌</span>
               </div>
               <div style="line-height:1.5rem;min-height:1.5rem;">
                 <span ng-repeat="l in oh.log ">
@@ -543,7 +527,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <!--label ng-show="$parent.histType==0" class="btn btn-sm btn-default"><input type="checkbox" value="true" ng-model="onlyNew">未完成</label-->
+          
         </div>
       </div>
     </div>
@@ -557,8 +541,7 @@
         <div class="modal-header">
           <button ui-turn-off="modal_history_item" class="btn btn-default pull-right btn-sm"><i class="fa fa-times"></i></button>
           <h4 class="modal-title">
-		    <span class="btn btn-xs btn-primary" ng-if="histType>1">{{oHistoryItem.datetime_i.substring(0,10)}}</span>
-				<span class="btn btn-xs btn-default">編號 {{oHistoryItem.oid}}</span><span class="btn btn-xs btn-default">{{oHistoryItem.resrvType}}</span><span class="btn btn-xs btn-default" ng-show="oHistoryItem.resrvType=='內用'">第{{oHistoryItem.resrvTable}}桌</span>
+		    
            </h4>
         </div>
         <div class="modal-body">

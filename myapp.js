@@ -11,7 +11,9 @@ app.config(function($routeProvider) {
 });
 
 app.controller('myCtrl', function($scope, $http) {
-
+  
+  console.log(document.title);
+  
   const checkLogin_URL = 'https://script.google.com/macros/s/AKfycbzHeg5Lidh_zz5c5bzmsuK3hfdk9vsSwJKdLJXyHidFWlXfV8D7WkwFlQ2nf9XYy8ex-g/exec';
   const getRealName_URL = 'https://script.google.com/macros/s/AKfycbxBoC4gWhleKATW-OH22XfDM85Z3wrvXoMVb9NLsQZbVVahyd8/exec';
   const getCats_URL = 'https://script.google.com/macros/s/AKfycby68whl-0C6dhds4hE_SOJ9120Bh-WuN0NHh-zVp48QnLSCmgSD/exec';
@@ -22,7 +24,7 @@ app.controller('myCtrl', function($scope, $http) {
   const setCheckedItem_URL = 'https://script.google.com/macros/s/AKfycbw2QYRcT88_PrdZ-R-pqSEs3yt4kjmQgKortVqQ3s6W8NzNGpgJusKCGxWLi-mlG1yI/exec';
   const setVoidOrder_URL = 'https://script.google.com/macros/s/AKfycbwxnSs8YXkAPuQT8x6DFHKDZmSM_OpnYVUbFHDijgsi_rz5NvrugoeskjMUEvgp4-oy/exec';
   const submitOrder_URL = 'https://script.google.com/macros/s/AKfycbw8Rk91zsvqvycoOSVMwCQ72u3-9_B-5PgzWG8Itshmy8phmvZ2CBwEUE4nFmCpjT-NHQ/exec';
-
+  
   angular.element(document).ready(function() {
 	$scope.init();    
 	window.location.href='./#menu';
@@ -57,7 +59,9 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.myUID = myU;
 		$scope.myPass = myP;
 		$scope.store = store;
-		$scope.sto=$scope.showHistoryItems(false,0);
+		$scope.showHistoryItems(false,$scope.pickedDate);
+		$scope.showMonthSheet($scope.pickedDate,false);
+		$scope.showDaySheet($scope.pickedDate,false);
 	  } else {
         	$scope.loginMessage = "帳密錯誤!!";
       }
@@ -120,10 +124,6 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.Ui.turnOn('modal_item_list');
   };
 
-  $scope.stopRefresh = function() {
-	clearTimeout($scope.sto);
-  };
-
   $scope.showHistoryItem = function(index) {
     $scope.Ui.turnOn('modal_history_item');
     $scope.currentHistoryIndex = index;
@@ -132,31 +132,26 @@ app.controller('myCtrl', function($scope, $http) {
   };
   
   
-  $scope.showHistoryItems = function(show,htype,query,d) {
-    if(show) {
+  $scope.showHistoryItems = function(show=true,d) {
+    if(!d) d = $scope.pickedDate;
+	else $scope.pickedDate=d;
+	$scope.mydate = $scope.localDate(d);
+	if(show) {
 		$scope.Ui.turnOn('modal_history_items');
-		$scope.loading=true;
 	}
-	
-	if(d) {
-		var myY = d.getFullYear();
-		var myM = ('0'+(d.getMonth()+1)).slice(-2);
-		var myD = ('0'+d.getDate()).slice(-2);
-		$scope.mydate = myY + '-' + myM + '-' +myD;
-    }
-		
-	$http.get(getHistoryItems_URL+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
-	    $scope.loading=false;
-		$scope.oHistoryItems=res.data;
-    }, function(err) {
-		$scope.oHistoryItems=[];
-	   	$scope.loading=false;
-       	$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
-	});
-  };
-  
-  $scope.stopRefresh = function() {
-	  clearTimeout($scope.sto);
+	console.log('hist',d,$scope.qHistItemsDate,$scope.mydate);
+	if(!show || $scope.qHistItemsDate!=$scope.mydate) {
+		$scope.loading=true;
+		$http.get(getHistoryItems_URL+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
+			$scope.oHistoryItems=res.data;
+			$scope.loading=false;
+			$scope.qHistItemsDate=$scope.mydate;
+		}, function(err) {
+			$scope.oHistoryItems=[];
+			$scope.loading=false;
+			$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
+		});
+	}
   };
   
   $scope.editItem = function(i) {
@@ -210,11 +205,8 @@ app.controller('myCtrl', function($scope, $http) {
   };
 
   $scope.orderSubmit = function(rsvType,rsvTable,oMemo) {
-	var d=new Date();
-	var myY = d.getFullYear();
-	var myM = ('0'+(d.getMonth()+1)).slice(-2);
-	var myD = ('0'+d.getDate()).slice(-2);
-	if($scope.today!= myY + '-' + myM + '-' +myD) {
+	var d=$scope.localDate(new Date());
+	if($scope.today!= d) {
 		$scope.logout();
 	};
 	
@@ -247,6 +239,10 @@ app.controller('myCtrl', function($scope, $http) {
 
 	  $scope.oCashing=false;
 	  $scope.Ui.turnOn('modal_history_item');
+	  
+	  $scope.showHistoryItems(false,$scope.pickedDate);
+	  $scope.showDaySheet($scope.pickedDate,false);
+	  $scope.showMonthSheet($scope.pickedDate,false);
       
     }, function(err) {
 	  $scope.loading=false;
@@ -262,9 +258,9 @@ app.controller('myCtrl', function($scope, $http) {
         $scope.loading=false;
     	if(response.data=='SUCCESS') {
 			$scope.Ui.turnOff('modal_history_item');
-			if($scope.oHistoryItems.length>0)$scope.lastOID=$scope.oHistoryItems[$scope.oHistoryItems.length-1].oid;
-			else $scope.lastOID=0;
-			$scope.showHistoryItems(false,0);
+			$scope.showHistoryItems(false,$scope.pickedDate);
+			$scope.showDaySheet($scope.pickedDate,false);
+			$scope.showMonthSheet($scope.pickedDate,false);
 		}
 		else if(response.data=='DUP') $scope.showDialog('提醒','本單已按過「作廢」','');
 		else $scope.showDialog('錯誤','請稍後再試一次','');
@@ -288,8 +284,10 @@ app.controller('myCtrl', function($scope, $http) {
 	  $http.get(setCheckedItem_URL+'?mongoid='+mongoid+'&uid='+$scope.myUID+'&AR='+ar+'&Cash='+cash+'&Ret='+ret+'&Coupon='+coupon).then( function(response) {
 		   $scope.loading=false;
 		   if(response.data=='SUCCESS') {
-			   $scope.Ui.turnOff('modal_history_item');
-	           $scope.showHistoryItems(false,0);
+				$scope.Ui.turnOff('modal_history_item');
+				$scope.showHistoryItems(false,$scope.pickedDate);
+				$scope.showDaySheet($scope.pickedDate,false);
+				$scope.showMonthSheet($scope.pickedDate,false);
 		   }
 		   else if(response.data=='DUP') $scope.showDialog('提醒','本單已按過「結帳」','');
 		   else $scope.showDialog('錯誤','請稍後再試一次','');
@@ -299,54 +297,69 @@ app.controller('myCtrl', function($scope, $http) {
 	  });
   };
   
-  $scope.showDaySheet = function(d) {
-	$scope.Ui.turnOn('modal_day_sheet');
-	var myY = d.getFullYear();
-	var myM = ('0'+(d.getMonth()+1)).slice(-2);
-	var myD = ('0'+d.getDate()).slice(-2);
-	$scope.mydate = myY + '-' + myM + '-' +myD;
-	$scope.loading=true;
-    $http.get(getDaySheet_URL+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
-      if (!res.data) return;
-      $scope.oDaySheet=res.data.byCashier;
-	  $scope.oDaySheet_P=res.data.byProduct;
-	  $scope.oDaySheet_C=res.data.byCategory;
-	  $scope.loading=false;
-    }, function(err) {
-      $scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
-	  $scope.loading=false;
-    }); 
+  $scope.showDaySheet = function(d,show=true) {
+	if(!d) d=$scope.pickedDate;
+	else $scope.pickedDate=d;
+	$scope.mydate = $scope.localDate(d);
+	if(show) {
+		$scope.Ui.turnOn('modal_day_sheet');
+	}
+	console.log('day',d,$scope.qDaySheetDate,$scope.mydate);
+	if(!show || $scope.qDaySheetDate!=$scope.mydate) {
+		$scope.loading=true;
+		$http.get(getDaySheet_URL+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
+			$scope.loading=false;
+			if (!res.data) return;
+			$scope.oDaySheet=res.data;
+			$scope.qDaySheetDate=$scope.mydate;
+		}, function(err) {
+		$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
+			$scope.loading=false;	
+		});
+	}	
   };
   
-  $scope.showMonthSheet = function(d) {
-	$scope.Ui.turnOn('modal_month_sheet');
+  $scope.showMonthSheet = function(d,show=true) {
+	if(!d) d=$scope.pickedMonth;
+	else $scope.pickedMonth=d;
+	
 	var myY = d.getFullYear();
 	var myM = ('0'+(d.getMonth()+1)).slice(-2);
 	var mydate = myY + '-' + myM;
-	$scope.loading=true;
-	$http.get(getMonthSheet_URL+'?store='+$scope.store+'&mydate='+mydate).then(function(res) {
-      if (res.data == null) return;
-      $scope.oMonthSheet=res.data.byCashier;
-      $scope.oMonthSheet_P=res.data.byProduct;
-	  $scope.oMonthSheet_C=res.data.byCategory;
-	  $scope.oMonthSheet_D=res.data.byDate;
-	  $scope.loading=false;
-    }, function(err) {
-	  $scope.loading=false;
-      $scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
-    }); 
+	if(show) {
+		$scope.Ui.turnOn('modal_month_sheet');
+	}
+	console.log('month',d,$scope.qMonthSheetDate,mydate);
+	if(!show || $scope.qMonthSheetDate!=mydate) {
+		$scope.loading=true;
+		$http.get(getMonthSheet_URL+'?store='+$scope.store+'&mydate='+mydate).then(function(res) {
+			$scope.loading=false;
+			if (res.data == null) return;
+			$scope.oMonthSheet=res.data;
+			$scope.qMonthSheetDate=mydate;
+		}, function(err) {
+			$scope.loading=false;
+			$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
+		}); 
+	}
   };
 
   $scope.setActiveTab = function(id) {
     $scope.activeTab=id;
   }
-
-  $scope.init = function() {
-    var d=new Date();
+  
+  $scope.localDate = function(d) {
+	if(typeof d === 'string') return d;
+	  
 	var myY = d.getFullYear();
 	var myM = ('0'+(d.getMonth()+1)).slice(-2);
 	var myD = ('0'+d.getDate()).slice(-2);
-	$scope.today= myY + '-' + myM + '-' +myD;
+	return myY + '-' + myM + '-' +myD;
+  }
+  
+  $scope.init = function() {
+    $scope.today=$scope.localDate(new Date());
+	
         	
     $scope.dialog = {
       title: '',
@@ -357,27 +370,21 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.activeTab = "1";
     $scope.oItem = {};
 	$scope.oItems = [];
-	$scope.oHistoryItems = [];
 	$scope.currentHistoryIndex = 0;
-	$scope.oDaySheet = [];
-	$scope.oDaySheet_P = [];
-	$scope.oMonthSheet = [];
-    $scope.oMonthSheet_P = [];
 	$scope.oTemp = {};
-    $scope.histType = '';
-	$scope.sto = '';
-    $itemIndex = 0;
+	$itemIndex = 0;
     $scope.submitAck = "";
     $scope.readySubmit = false;
     $scope.store = "gallery";
 	$scope.loginMessage = "";
     $scope.oCashing = false;
+	$scope.qHistItemsDate = '';
+	$scope.qDaySheetDate = '';
+	$scope.qMonthSheetDate = '';
     $scope.pickedDate = new Date();
 	$scope.pickedMonth = new Date();
     $scope.classifyBy = "Cashier";
 	$scope.loading = false;
-	$scope.lastOID=0;
-	$scope.nowCash=0;
 	$scope.customerType='';
 	$scope.authenticated=false;
 
