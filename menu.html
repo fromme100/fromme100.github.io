@@ -188,12 +188,12 @@
             </div>
             <div style="padding:0.1rem;">
               <label class="btn btn-sm btn-default">密碼
-              </label><input ng-disabled="loginMessage=='驗證中...'" type="password" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ng-model="myPASS" ng-keypress="($event.which === 13) && loginMessage!='驗證中...'?checkLogin(myUID,myPASS,store):0" placeholder="請輸入密碼" />
+              </label><input ng-disabled="loginMessage.length=='驗證中...'" type="password" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ng-model="myPASS" ng-keypress="($event.which === 13) && loginMessage!='驗證中...'?checkLogin(myUID,myPASS,store):0" placeholder="請輸入密碼" />
             </div>
           </div>
         </div>
         <div class="modal-footer bg-info">
-          <button ng-click="checkLogin(myUID,myPASS,store)" class="btn btn-success  btn-sm" ng-disabled="loginMessage=='驗證中...'">登入</button>
+          <button ng-click="checkLogin(myUID,myPASS,store)" class="btn btn-success  btn-sm" ng-disabled="loginMessage.length=='驗證中...'">登入</button>
         </div>
       </div>
     </div>
@@ -351,7 +351,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title"><span class="btn btn-sm btn-default">日報</span>&nbsp;&nbsp;<input class="bg-info" type="date" ng-model="pickedDate" ng-value="localDate(pickedDate)" ng-change="showDaySheet(pickedDate,true)"></h4>
-          <button ui-turn-off="modal_day_sheet" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button>
+          <button ui-turn-off="modal_day_sheet" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button><button ng-click="showDaySheet(pickedDate,false)" class="btn btn-sm btn-default pull-right"><i class="fa fa-refresh"></i></button>
         </div>
         <div class="modal-body" style="font-size:0.8rem">
           <label><input type="radio" ng-model="classifyBy" value="Cashier">依人員</label>
@@ -415,7 +415,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title"><span class="btn btn-sm btn-default">月報</span>&nbsp;&nbsp;<input class="bg-info" type="month" ng-model="pickedMonth" ng-value="localDate(pickedMonth).slice(0,7)" ng-change="showMonthSheet(pickedMonth,true)"></h4>
-          <button ui-turn-off="modal_month_sheet" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button>
+          <button ui-turn-off="modal_month_sheet" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button><button ng-click="showMonthSheet(pickedMonth,false)" class="btn btn-sm btn-default pull-right"><i class="fa fa-refresh"></i></button>
         </div>
         <div class="modal-body">
           <label><input type="radio" ng-model="classifyBy" value="Cashier">依人員</label>
