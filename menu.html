@@ -503,7 +503,7 @@
             			
 			<input class="bg-info" type="date" ng-model="pickedDate"  ng-change="showHistoryItems(true,pickedDate)">
   		  </h4>
-          <button ui-turn-off="modal_history_items" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button>
+          <button ui-turn-off="modal_history_items" class="btn btn-sm btn-default pull-right"><i class="fa fa-times"></i></button><button ng-click="showHistoryItems(false,pickedDate)" class="btn btn-sm btn-default pull-right"><i class="fa fa-refresh"></i></button>
         </div>
         <div class="modal-body">
 		  <div class="list-group">
