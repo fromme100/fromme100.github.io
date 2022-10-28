@@ -188,12 +188,12 @@
             </div>
             <div style="padding:0.1rem;">
               <label class="btn btn-sm btn-default">密碼
-              </label><input type="password" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ng-model="myPASS" ng-keypress="($event.which === 13)?checkLogin(myUID,myPASS,store):0" placeholder="請輸入密碼" />
+              </label><input g-disabled="loginMessage=='驗證中...'" type="password" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ng-model="myPASS" ng-keypress="($event.which === 13)?checkLogin(myUID,myPASS,store):0" placeholder="請輸入密碼" />
             </div>
           </div>
         </div>
         <div class="modal-footer bg-info">
-          <button ng-click="checkLogin(myUID,myPASS,store)" class="btn btn-success  btn-sm" ng-disabled="loginMessage.length>0">登入</button>
+          <button ng-click="checkLogin(myUID,myPASS,store)" class="btn btn-success  btn-sm" g-disabled="loginMessage=='驗證中...'">登入</button>
         </div>
       </div>
     </div>
