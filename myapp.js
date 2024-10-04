@@ -262,7 +262,7 @@ app.controller('myCtrl', function($scope, $http) {
 
  
   $scope.voidOrder = function(o) {
-	var mongoid=o._id;
+	var mongoid=o._id.$id;
 	$scope.loading=true;
 	$http.get(setVoidOrder_URL+'?mongoid='+mongoid+'&uid='+$scope.myUID).then( function(response) {
         $scope.loading=false;
@@ -287,7 +287,7 @@ app.controller('myCtrl', function($scope, $http) {
   };
 
   $scope.check = function(o,ar,cash,ret,coupon) {
-	  var mongoid=o._id;
+	  var mongoid=o._id.$id;
       $scope.loading=true;
 	  cash = cash || 0;
 	  
