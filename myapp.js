@@ -14,7 +14,8 @@ app.controller('myCtrl', function($scope, $http) {
   
   console.log(document.title);
   
-  const checkLogin_URL = 'https://script.google.com/macros/s/AKfycbzHeg5Lidh_zz5c5bzmsuK3hfdk9vsSwJKdLJXyHidFWlXfV8D7WkwFlQ2nf9XYy8ex-g/exec';
+  const checkLogin_URL = 'https://script.google.com/macros/s/AKfycbzMuaQxdnjXYS09JlT3GD9PlnRN4ccyNjE2_ptkHXjm0cnI2eQobA1gAsisvfjqPrhNug/exec'; 
+  
   const getRealName_URL = 'https://script.google.com/macros/s/AKfycbxBoC4gWhleKATW-OH22XfDM85Z3wrvXoMVb9NLsQZbVVahyd8/exec';
   const getCats_URL = 'https://script.google.com/macros/s/AKfycby68whl-0C6dhds4hE_SOJ9120Bh-WuN0NHh-zVp48QnLSCmgSD/exec';
   const getProducts_URL = 'https://script.google.com/macros/s/AKfycbywdB4QWsHFXN4SiRCSHonQSRnR3LXGtuQJhu0FTKI8PCBjAHVB/exec';
