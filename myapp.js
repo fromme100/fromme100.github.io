@@ -14,7 +14,7 @@ app.controller('myCtrl', function($scope, $http) {
   
   console.log(document.title);
   
-  const checkLogin_URL = 'https://script.google.com/macros/s/AKfycbxHeRC0UliO8YlXB68ME0A3Wr-g2mJ_8oRy-W-WIYHHW7jLPFwq-pnQNHFNNVoFmTPdPg/exec'; 
+  const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
   
   const getRealName_URL = 'https://script.google.com/macros/s/AKfycbxBoC4gWhleKATW-OH22XfDM85Z3wrvXoMVb9NLsQZbVVahyd8/exec';
   const getCats_URL = 'https://script.google.com/macros/s/AKfycby68whl-0C6dhds4hE_SOJ9120Bh-WuN0NHh-zVp48QnLSCmgSD/exec';
@@ -27,14 +27,6 @@ app.controller('myCtrl', function($scope, $http) {
   const setVoidOrder_URL = 'https://cashflow.yushanth.com/thankGod/fromme/setVoidOrder.php';
   const submitOrder_URL = 'https://cashflow.yushanth.com/thankGod/fromme/submitOrder.php';
 
-  /*
-  const getHistoryItems_URL = 'https://script.google.com/macros/s/AKfycbwRSrwYw5E5m7SVaoKLIGHM1swnpLBimZI1v8Khjl_hppKl0LJiv5xrufpoAuiVJ4LU/exec'; 
-  const getDaySheet_URL = 'https://script.google.com/macros/s/AKfycbwWonALr-i7SnqzYJi8WsibbPzTgUqYSU_QqOY5kyTcpClZp07VBEqJqMyMSABkcUGi/exec';
-  const getMonthSheet_URL = 'https://script.google.com/macros/s/AKfycbztINf1uW4JsB26pTZu9QTM9jeBYgqlpIXuLSnfYjoQeC-VwaBUUZWqurZ4T3f6gWMA/exec';
-  const setCheckedItem_URL = 'https://script.google.com/macros/s/AKfycbw2QYRcT88_PrdZ-R-pqSEs3yt4kjmQgKortVqQ3s6W8NzNGpgJusKCGxWLi-mlG1yI/exec';
-  const setVoidOrder_URL = 'https://script.google.com/macros/s/AKfycbwxnSs8YXkAPuQT8x6DFHKDZmSM_OpnYVUbFHDijgsi_rz5NvrugoeskjMUEvgp4-oy/exec';
-  const submitOrder_URL = 'https://script.google.com/macros/s/AKfycbw8Rk91zsvqvycoOSVMwCQ72u3-9_B-5PgzWG8Itshmy8phmvZ2CBwEUE4nFmCpjT-NHQ/exec';
-  */
   angular.element(document).ready(function() {
 	$scope.init();    
 	window.location.href='./#menu';
