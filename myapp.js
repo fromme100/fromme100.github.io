@@ -329,7 +329,7 @@ app.controller('myCtrl', function($scope, $http) {
 	if(show) {
 		$scope.Ui.turnOn('modal_month_sheet');
 	}
-	console.log('month',d,$scope.qMonthSheetDate,mydate);
+	
 	if(!show || $scope.qMonthSheetDate!=mydate) {
 		$scope.loading=true;
 		$http.get(getMonthSheet_URL+'?store='+$scope.store+'&mydate='+mydate).then(function(res) {
@@ -382,42 +382,22 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.pickedDate = new Date();
 	$scope.pickedMonth = new Date();
     $scope.classifyBy = "Cashier";
-	$scope.loading = false;
+	$scope.loading = true;
 	$scope.customerType='';
 	$scope.authenticated=false;
 
 	//init.php
 	$http.get(init_URL).then(function(res) {
-      if (res.data == null) return;
-		console.log(res.data);
-		$scope.realNames=res.data.realNames;
-		$scope.realNames['total']='合　　計';
-		$scope.cats=res.data.cats;
-		$scope.products=res.data.products;
-	  }, function(err) {
-		  console.log(err);
+		$scope.loading = false;
+		if (res.data == null) return;
+			console.log(res.data);
+			$scope.realNames=res.data.realNames;
+			$scope.realNames['total']='合　　計';
+			$scope.cats=res.data.cats;
+			$scope.products=res.data.products;
+		}, function(err) {
+			console.log(err);
+			$scope.loading = false;
     }); 
-	
-	/*/getRealNames
-	$http.get(getRealName_URL).then(function(res) {
-      if (res.data == null) return;
-      $scope.realNames=res.data;
-	  $scope.realNames['total']='合　　計';
-	  }, function(err) {
-    }); 
-
-	//getCats
-	$http.get(getCats_URL).then(function(res) {
-      if (res.data == null) return;
-      $scope.cats=res.data;
-	  }, function(err) {
-    }); 
-	
-	//getProducts
-	$http.get(getProducts_URL).then(function(res) {
-      if (res.data == null) return;
-      $scope.products=res.data;
-	  }, function(err) {
-    });*/ 
   };
 });
