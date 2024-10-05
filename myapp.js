@@ -38,6 +38,7 @@ app.controller('myCtrl', function($scope, $http) {
   $scope.login = function() {
 	$scope.myUID = '';
     $scope.myPass = '';
+	$scope.loginMessage = '';
     $scope.Ui.turnOn('modal_login');
   };
    
@@ -74,7 +75,7 @@ app.controller('myCtrl', function($scope, $http) {
   
   $scope.logout = function() {
 	  //window.location.reload();
-		$scope.Ui.turnOn('modal_login');
+	  $scope.login();
   };
 
   $scope.showDialog = function(t, c, f) {
