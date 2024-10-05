@@ -12,10 +12,10 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
   
-  console.log("v3.09");
+  $scope.title="v3.10";
   
+  const init_URL = 'https://cashflow.yushanth.com/thankGod/fromme/init.php';
   const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
-  
   const getRealName_URL = 'https://script.google.com/macros/s/AKfycbxBoC4gWhleKATW-OH22XfDM85Z3wrvXoMVb9NLsQZbVVahyd8/exec';
   const getCats_URL = 'https://script.google.com/macros/s/AKfycby68whl-0C6dhds4hE_SOJ9120Bh-WuN0NHh-zVp48QnLSCmgSD/exec';
   const getProducts_URL = 'https://script.google.com/macros/s/AKfycbywdB4QWsHFXN4SiRCSHonQSRnR3LXGtuQJhu0FTKI8PCBjAHVB/exec';
@@ -362,9 +362,7 @@ app.controller('myCtrl', function($scope, $http) {
   
   $scope.init = function() {
     $scope.today=$scope.localDate(new Date());
-	
-        	
-    $scope.dialog = {
+	$scope.dialog = {
       title: '',
       content: '',
       callback: ''
@@ -391,6 +389,14 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.customerType='';
 	$scope.authenticated=false;
 
+	//init.php
+	$http.get(init_URL).then(function(res) {
+      if (res.data == null) return;
+		console.log(res.data);
+	  }, function(err) {
+		  console.log(err);
+    }); 
+	
 	//getRealNames
 	$http.get(getRealName_URL).then(function(res) {
       if (res.data == null) return;
