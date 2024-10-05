@@ -16,10 +16,7 @@ app.controller('myCtrl', function($scope, $http) {
   
   const init_URL = 'https://cashflow.yushanth.com/thankGod/fromme/init.php';
   const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
-  const getRealName_URL = 'https://script.google.com/macros/s/AKfycbxBoC4gWhleKATW-OH22XfDM85Z3wrvXoMVb9NLsQZbVVahyd8/exec';
-  const getCats_URL = 'https://script.google.com/macros/s/AKfycby68whl-0C6dhds4hE_SOJ9120Bh-WuN0NHh-zVp48QnLSCmgSD/exec';
-  const getProducts_URL = 'https://script.google.com/macros/s/AKfycbywdB4QWsHFXN4SiRCSHonQSRnR3LXGtuQJhu0FTKI8PCBjAHVB/exec';
-  
+    
   const getHistoryItems_URL = 'https://cashflow.yushanth.com/thankGod/fromme/getHistoryItems.php'; 
   const getDaySheet_URL = 'https://cashflow.yushanth.com/thankGod/fromme/getDaySheet.php';
   const getMonthSheet_URL = 'https://cashflow.yushanth.com/thankGod/fromme/getMonthSheet.php';
@@ -393,11 +390,15 @@ app.controller('myCtrl', function($scope, $http) {
 	$http.get(init_URL).then(function(res) {
       if (res.data == null) return;
 		console.log(res.data);
+		$scope.realNames=res.data.realNames;
+		$scope.realNames['total']='合　　計';
+		$scope.cats=res.data.cats;
+		$scope.products=res.data.products;
 	  }, function(err) {
 		  console.log(err);
     }); 
 	
-	//getRealNames
+	/*/getRealNames
 	$http.get(getRealName_URL).then(function(res) {
       if (res.data == null) return;
       $scope.realNames=res.data;
@@ -417,6 +418,6 @@ app.controller('myCtrl', function($scope, $http) {
       if (res.data == null) return;
       $scope.products=res.data;
 	  }, function(err) {
-    }); 
+    });*/ 
   };
 });
