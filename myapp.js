@@ -12,7 +12,7 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
   
-  $scope.title="v3.13";
+  $scope.title="v3.14";
   
   const init_URL = 'https://cashflow.yushanth.com/thankGod/fromme/init.php';
   const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
@@ -73,7 +73,8 @@ app.controller('myCtrl', function($scope, $http) {
   };
   
   $scope.logout = function() {
-	  window.location.reload();
+	  //window.location.reload();
+	  $scope.login();
   };
 
   $scope.showDialog = function(t, c, f) {
