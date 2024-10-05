@@ -12,7 +12,7 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
   
-  console.log("v3.08");
+  console.log("v3.09");
   
   const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
   
