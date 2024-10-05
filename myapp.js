@@ -61,14 +61,15 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.myUID = myU;
 		$scope.myPass = myP;
 		$scope.store = store;
-		$scope.showHistoryItems(false,$scope.pickedDate);
-		$scope.showMonthSheet($scope.pickedDate,false);
-		$scope.showDaySheet($scope.pickedDate,false);
+		//$scope.showHistoryItems(false,$scope.pickedDate);
+		//$scope.showMonthSheet($scope.pickedDate,false);
+		//$scope.showDaySheet($scope.pickedDate,false);
 	  } else {
         	$scope.loginMessage = "帳密錯誤!!";
       }
 	  $scope.loading=false;
     }, function(err) {
+		$scope.loginMessage = "連線錯誤!!";
 	  	$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
 		$scope.loading=false;
     });
