@@ -65,13 +65,13 @@ app.controller('myCtrl', function($scope, $http) {
 		//$scope.showMonthSheet($scope.pickedDate,false);
 		//$scope.showDaySheet($scope.pickedDate,false);
 	  } else {
-        	$scope.loginMessage = "帳密錯誤!!";
+        	$scope.loginMessage = "帳密錯誤!!請再試一次";
+			$scope.loading=false;
       }
 	  $scope.loading=false;
     }, function(err) {
-		$scope.loginMessage = "連線錯誤!!";
-	  	$scope.showDialog('網路連線錯誤', err.status + ':' + err.statusText, '');
-		$scope.loading=false;
+		$scope.loginMessage = "連線錯誤!!請再試一次";
+	  	$scope.loading=false;
     });
   };
   
