@@ -12,7 +12,7 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
   
-  $scope.title="v3.18";
+  $scope.title="v3.19";
   
   const init_URL = 'https://cashflow.yushanth.com/thankGod/fromme/init.php';
   const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
@@ -59,7 +59,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.myUID = myU;
 		$scope.myPass = myP;
 		$scope.store = store;
-		$scope.http_config = {headers: {		'Access-Control-Allow-Origin': '*','Access-Control-Allow-Methods': 'GET, POST','Authorization': 'Basic '+ btoa(myU+':'+myP)}};
+		$scope.http_config = {headers: {		'access-control-allow-origin': '*','Access-Control-Allow-Headers': 'Content-Type, Authorization','Access-Control-Allow-Methods': '*','Authorization': 'Basic '+ btoa(myU+':'+myP)}};
 		//$scope.showHistoryItems(false,$scope.pickedDate);
 		//$scope.showMonthSheet($scope.pickedDate,false);
 		//$scope.showDaySheet($scope.pickedDate,false);
@@ -388,7 +388,9 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.loading = true;
 	$scope.customerType='';
 	$scope.authenticated=false;
-	$scope.http_config = {headers: {'Access-Control-Allow-Origin': '*','Access-Control-Allow-Methods': 'GET, POST','Authorization': 'Basic '+ btoa('init:tini')}};
+	$scope.http_config = {headers: {'access-control-allow-origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Methods': '*','Authorization': 'Basic '+ btoa('init:tini')}};
 	//init.php
 	$http.get(init_URL,$scope.http_config).then(function(res) {
 		$scope.loading = false;
