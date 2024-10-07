@@ -12,7 +12,7 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
   
-  $scope.title="v3.20";
+  $scope.title="v3.21";
   
   const init_URL = 'https://cashflow.yushanth.com/thankGod/fromme/init.php';
   const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
@@ -45,7 +45,7 @@ app.controller('myCtrl', function($scope, $http) {
   $scope.checkLogin = function(myU, myP, store) {
 	$scope.loading=true;
 	$scope.loginMessage = '驗證中...';
-    $http.get(checkLogin_URL+'?user=' + myU + '&pass=' + myP,$scope.http_config)
+    $http.post(checkLogin_URL,{'user':myU,'pass':myP},$scope.http_config)
 	.then(function(response) {
 	  if(response.data) {
 		 result=response.data.substring(0,2);
@@ -232,7 +232,7 @@ app.controller('myCtrl', function($scope, $http) {
 	  'orderMemo': oMemo
     };
 	$scope.loading=true;
-	$http.get(submitOrder_URL+'?data='+JSON.stringify(orderPayload),$scope.http_config).then(function(response) {
+	$http.post(submitOrder_URL,orderPayload,$scope.http_config).then(function(response) {
 	  $scope.loading=false;
 	  orderPayload = response.data;
 	  $scope.oHistoryItem = orderPayload;
