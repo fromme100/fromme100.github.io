@@ -12,7 +12,7 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
   
-  $scope.title="v3.16";
+  $scope.title="v3.17";
   
   const init_URL = 'https://cashflow.yushanth.com/thankGod/fromme/init.php';
   const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
@@ -45,7 +45,7 @@ app.controller('myCtrl', function($scope, $http) {
   $scope.checkLogin = function(myU, myP, store) {
 	$scope.loading=true;
 	$scope.loginMessage = '驗證中...';
-    $http.get(checkLogin_URL+'?user=' + myU + '&pass=' + myP)
+    $http.get(checkLogin_URL+'?user=' + myU + '&pass=' + myP,$scope.http_config)
 	.then(function(response) {
 	  if(response.data) {
 		 result=response.data.substring(0,2);
@@ -59,6 +59,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.myUID = myU;
 		$scope.myPass = myP;
 		$scope.store = store;
+		$scope.http_config = {headers: {'Authorization': 'Basic '+ btoa(myU+':'+myP)}};
 		//$scope.showHistoryItems(false,$scope.pickedDate);
 		//$scope.showMonthSheet($scope.pickedDate,false);
 		//$scope.showDaySheet($scope.pickedDate,false);
@@ -144,7 +145,7 @@ app.controller('myCtrl', function($scope, $http) {
 	console.log('hist',d,$scope.qHistItemsDate,$scope.mydate);
 	if(!show || $scope.qHistItemsDate!=$scope.mydate) {
 		$scope.loading=true;
-		$http.get(getHistoryItems_URL+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
+		$http.get(getHistoryItems_URL+'?store='+$scope.store+'&mydate='+$scope.mydate,$scope.http_config).then(function(res) {
 			$scope.oHistoryItems=res.data;
 			$scope.loading=false;
 			$scope.qHistItemsDate=$scope.mydate;
@@ -231,7 +232,7 @@ app.controller('myCtrl', function($scope, $http) {
 	  'orderMemo': oMemo
     };
 	$scope.loading=true;
-	$http.get(submitOrder_URL+'?data='+JSON.stringify(orderPayload)).then(function(response) {
+	$http.get(submitOrder_URL+'?data='+JSON.stringify(orderPayload),$scope.http_config).then(function(response) {
 	  $scope.loading=false;
 	  orderPayload = response.data;
 	  $scope.oHistoryItem = orderPayload;
@@ -256,7 +257,7 @@ app.controller('myCtrl', function($scope, $http) {
   $scope.voidOrder = function(o) {
 	var mongoid=o._id.$id;
 	$scope.loading=true;
-	$http.get(setVoidOrder_URL+'?mongoid='+mongoid+'&uid='+$scope.myUID).then( function(response) {
+	$http.get(setVoidOrder_URL+'?mongoid='+mongoid+'&uid='+$scope.myUID,$scope.http_config).then( function(response) {
         $scope.loading=false;
     	if(response.data=='SUCCESS') {
 			$scope.Ui.turnOff('modal_history_item');
@@ -283,7 +284,7 @@ app.controller('myCtrl', function($scope, $http) {
       $scope.loading=true;
 	  cash = cash || 0;
 	  
-	  $http.get(setCheckedItem_URL+'?mongoid='+mongoid+'&uid='+$scope.myUID+'&AR='+ar+'&Cash='+cash+'&Ret='+ret+'&Coupon='+coupon).then( function(response) {
+	  $http.get(setCheckedItem_URL+'?mongoid='+mongoid+'&uid='+$scope.myUID+'&AR='+ar+'&Cash='+cash+'&Ret='+ret+'&Coupon='+coupon,$scope.http_config).then( function(response) {
 		   $scope.loading=false;
 		   if(response.data=='SUCCESS') {
 				$scope.Ui.turnOff('modal_history_item');
@@ -309,7 +310,7 @@ app.controller('myCtrl', function($scope, $http) {
 	console.log('day',d,$scope.qDaySheetDate,$scope.mydate);
 	if(!show || $scope.qDaySheetDate!=$scope.mydate) {
 		$scope.loading=true;
-		$http.get(getDaySheet_URL+'?store='+$scope.store+'&mydate='+$scope.mydate).then(function(res) {
+		$http.get(getDaySheet_URL+'?store='+$scope.store+'&mydate='+$scope.mydate,$scope.http_config).then(function(res) {
 			$scope.loading=false;
 			if (!res.data) return;
 			$scope.oDaySheet=res.data;
@@ -334,7 +335,7 @@ app.controller('myCtrl', function($scope, $http) {
 	
 	if(!show || $scope.qMonthSheetDate!=mydate) {
 		$scope.loading=true;
-		$http.get(getMonthSheet_URL+'?store='+$scope.store+'&mydate='+mydate).then(function(res) {
+		$http.get(getMonthSheet_URL+'?store='+$scope.store+'&mydate='+mydate,$scope.http_config).then(function(res) {
 			$scope.loading=false;
 			if (res.data == null) return;
 			$scope.oMonthSheet=res.data;
@@ -387,9 +388,9 @@ app.controller('myCtrl', function($scope, $http) {
 	$scope.loading = true;
 	$scope.customerType='';
 	$scope.authenticated=false;
-
+	$scope.http_config = {headers: {'Authorization': 'Basic '+ btoa('init:tini')}};
 	//init.php
-	$http.get(init_URL).then(function(res) {
+	$http.get(init_URL,$scope.http_config).then(function(res) {
 		$scope.loading = false;
 		if (res.data == null) return;
 			console.log(res.data);
