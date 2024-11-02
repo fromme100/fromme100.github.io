@@ -14,15 +14,15 @@ app.controller('myCtrl', function($scope, $http) {
   
   $scope.title="v3.21";
   
-  const init_URL = 'https://cashflow.yushanth.com/thankGod/fromme/init.php';
-  const checkLogin_URL = 'https://cashflow.yushanth.com/thankGod/fromme/checkLogin.php';
+  const init_URL = 'https://cashflow.yushanth.com/fromme/init.php';
+  const checkLogin_URL = 'https://cashflow.yushanth.com/fromme/checkLogin.php';
     
-  const getHistoryItems_URL = 'https://cashflow.yushanth.com/thankGod/fromme/getHistoryItems.php'; 
-  const getDaySheet_URL = 'https://cashflow.yushanth.com/thankGod/fromme/getDaySheet.php';
-  const getMonthSheet_URL = 'https://cashflow.yushanth.com/thankGod/fromme/getMonthSheet.php';
-  const setCheckedItem_URL = 'https://cashflow.yushanth.com/thankGod/fromme/setCheckedItem.php';
-  const setVoidOrder_URL = 'https://cashflow.yushanth.com/thankGod/fromme/setVoidOrder.php';
-  const submitOrder_URL = 'https://cashflow.yushanth.com/thankGod/fromme/submitOrder.php';
+  const getHistoryItems_URL = 'https://cashflow.yushanth.com/fromme/getHistoryItems.php'; 
+  const getDaySheet_URL = 'https://cashflow.yushanth.com/fromme/getDaySheet.php';
+  const getMonthSheet_URL = 'https://cashflow.yushanth.com/fromme/getMonthSheet.php';
+  const setCheckedItem_URL = 'https://cashflow.yushanth.com/fromme/setCheckedItem.php';
+  const setVoidOrder_URL = 'https://cashflow.yushanth.com/fromme/setVoidOrder.php';
+  const submitOrder_URL = 'https://cashflow.yushanth.com/fromme/submitOrder.php';
 
   angular.element(document).ready(function() {
 	$scope.init();    
