@@ -12,17 +12,16 @@ app.config(function($routeProvider) {
 
 app.controller('myCtrl', function($scope, $http) {
   
-  $scope.title="v3.21";
-  
-  const init_URL = 'https://cashflow.yushanth.com/fromme/init.php';
-  const checkLogin_URL = 'https://cashflow.yushanth.com/fromme/checkLogin.php';
-    
-  const getHistoryItems_URL = 'https://cashflow.yushanth.com/fromme/getHistoryItems.php'; 
-  const getDaySheet_URL = 'https://cashflow.yushanth.com/fromme/getDaySheet.php';
-  const getMonthSheet_URL = 'https://cashflow.yushanth.com/fromme/getMonthSheet.php';
-  const setCheckedItem_URL = 'https://cashflow.yushanth.com/fromme/setCheckedItem.php';
-  const setVoidOrder_URL = 'https://cashflow.yushanth.com/fromme/setVoidOrder.php';
-  const submitOrder_URL = 'https://cashflow.yushanth.com/fromme/submitOrder.php';
+  $scope.title="v3.22";
+  const base = 'https://fromme100.fly.dev/ws/';
+  const init_URL = base+'init.php';
+  const checkLogin_URL = base+'checkLogin.php';
+  const getHistoryItems_URL = base+'getHistoryItems.php'; 
+  const getDaySheet_URL = base+'getDaySheet.php';
+  const getMonthSheet_URL = base+'getMonthSheet.php';
+  const setCheckedItem_URL = base+'setCheckedItem.php';
+  const setVoidOrder_URL = base+'setVoidOrder.php';
+  const submitOrder_URL = base+'submitOrder.php';
 
   angular.element(document).ready(function() {
 	$scope.init();    
